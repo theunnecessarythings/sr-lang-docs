@@ -9,7 +9,7 @@ export const theme: ThemeUserConfig = {
   /** Description metadata for your website. Can be used in page metadata. */
   description: 'Stay hungry, stay foolish',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
-  favicon: '/favicon/favicon.ico',
+  favicon: '/language/favicon/favicon.ico',
   /** Specify the default language for this site. */
   locale: {
     lang: 'en-US',
@@ -177,19 +177,19 @@ export const terms: CardListData = {
   list: [
     {
       title: 'Privacy Policy',
-      link: '/terms/privacy-policy'
+      link: '/language/terms/privacy-policy'
     },
     {
       title: 'Terms and Conditions',
-      link: '/terms/terms-and-conditions'
+      link: '/language/terms/terms-and-conditions'
     },
     {
       title: 'Copyright',
-      link: '/terms/copyright'
+      link: '/language/terms/copyright'
     },
     {
       title: 'Disclaimer',
-      link: '/terms/disclaimer'
+      link: '/language/terms/disclaimer'
     }
   ]
 }
