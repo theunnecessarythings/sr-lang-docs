@@ -14,7 +14,7 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 
 // Get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/docs/**/*.{jpeg,jpg,png,gif,avif.webp}' // add more image formats if needed
+  '/language/src/content/docs/**/*.{jpeg,jpg,png,gif,avif.webp}' // add more image formats if needed
 )
 
 const renderContent = async (post: CollectionEntry<'docs'>, site: URL) => {
@@ -26,7 +26,7 @@ const renderContent = async (post: CollectionEntry<'docs'>, site: URL) => {
     return async function (tree: Root) {
       const promises: Promise<void>[] = []
       visit(tree, 'image', (node) => {
-        if (node.url.startsWith('/images')) {
+        if (node.url.startsWith('/language/images')) {
           node.url = `${site}${node.url.replace('/', '')}`
         } else {
           const imagePathPrefix = `/src/content/docs/${post.id}/${node.url.replace('./', '')}`
@@ -61,7 +61,7 @@ const GET = async (context: AstroGlobal) => {
     // Basic configs
     trailingSlash: false,
     xmlns: { h: 'http://www.w3.org/TR/html4/' },
-    stylesheet: '/scripts/pretty-feed-v3.xsl',
+    stylesheet: '/language/scripts/pretty-feed-v3.xsl',
 
     // Contents
     title: config.title,

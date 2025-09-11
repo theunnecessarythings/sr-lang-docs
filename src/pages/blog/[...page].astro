@@ -50,7 +50,7 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/' variant='back' />
+  <Button title='Back' href='/language' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
@@ -66,7 +66,7 @@ const paginationProps = {
               <span class='text-muted-foreground'>
                 Page {page.currentPage} - Showing {page.data.length} of {collectionsCount} posts
               </span>
-              <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
+          <a aria-label='View all blog by years' href='/language/archives' data-astro-prefetch>
                 View all posts by years →
               </a>
             </div>
@@ -94,7 +94,7 @@ const paginationProps = {
                 ))}
               </ul>
               <span class='mt-4 block sm:text-end'>
-                <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
+          <a aria-label='View all blog categories' href='/language/tags' data-astro-prefetch>
                   View all →
                 </a>
               </span>
