@@ -1,0 +1,76 @@
+---
+title: 'Advanced Error Handling in sr-lang'
+publishDate: 2025-11-09
+description: 'Master error handling in sr-lang with custom error types, `catch`, and `orelse`.'
+tags:
+  - sr-lang
+  - Error Handling
+  - Advanced
+language: 'English'
+heroImage: { src: './thumbnail.jpg', color: '#EF4444' }
+---
+
+## Advanced Error Handling in sr-lang
+
+sr-lang provides a robust and expressive error handling system that allows you to write reliable and maintainable code. Instead of using exceptions, sr-lang uses a combination of custom error types and the `catch` and `orelse` keywords to handle errors in a structured and predictable way.
+
+### Custom Error Types
+
+You can define your own custom error types using the `error` keyword. This allows you to create a set of named error values that are specific to your application.
+
+```go
+MyError :: error {
+    NotFound,
+    PermissionDenied,
+    InvalidInput,
+};
+```
+
+### Functions that Return Errors
+
+A function or procedure can indicate that it may return an error by using the `!` operator in its return type. This creates an error union type, which can hold either a success value or an error value.
+
+```go
+parse_int :: fn(s: string) i32!MyError {
+    // ... implementation ...
+    if (/* parsing fails */) {
+        return MyError.InvalidInput;
+    }
+    // ... return the parsed integer ...
+}
+```
+
+### Handling Errors with `catch`
+
+The `catch` keyword provides a way to handle errors in a concise and readable way. You can use `catch` to provide a fallback value or to execute a block of code to handle the error.
+
+```go
+// Providing a fallback value
+value := parse_int("abc") catch 0;
+
+// Executing a block of code
+parse_int("abc") catch |err| {
+    if err == MyError.InvalidInput {
+        printf("Invalid input!\n");
+    } else {
+        printf("An unknown error occurred.\n");
+    }
+};
+```
+
+### The `orelse` Keyword
+
+The `orelse` keyword is used with optional types (`?T`) to provide a fallback value if the optional is `null`.
+
+```go
+maybe_value: ?i32 = null;
+value := maybe_value orelse 0; // value is now 0
+```
+
+`orelse` can also be combined with `catch` to create powerful error handling chains.
+
+```go
+might_fail(0) orelse { 0 } catch 100;
+```
+
+By using custom error types, error unions, and the `catch` and `orelse` keywords, you can write code that is both robust and easy to read. sr-lang's error handling system encourages you to handle errors explicitly, leading to more reliable and predictable programs.

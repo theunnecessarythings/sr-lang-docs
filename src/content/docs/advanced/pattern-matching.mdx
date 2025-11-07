@@ -1,0 +1,182 @@
+---
+title: Pattern Matching
+description: Dive deep into sr-lang's powerful pattern matching capabilities.
+template: doc
+order: 3
+---
+
+## Pattern Matching
+
+sr-lang's **pattern matching** is a powerful feature that allows you to compare a value against a series of patterns and execute code based on which pattern matches. It's a versatile tool for destructuring data, controlling program flow, and handling different cases in a concise and type-safe manner. The primary construct for pattern matching is the `match` expression.
+
+### Basic Patterns
+
+#### Literal Patterns
+
+Match against exact literal values.
+
+```go
+x := 5;
+result := match x {
+  1 => "One",
+  5 => "Five",
+  _ => "Other", // Wildcard pattern for any other value
+};
+printf("Result: %s\n", result);
+```
+
+**Output:**
+```
+Result: Five
+```
+
+#### Wildcard Pattern (`_`)
+
+The wildcard pattern `_` matches any value and ignores it. It's often used as a catch-all in `match` expressions or to ignore parts of a destructured value.
+
+```go
+// In a match expression
+x := 10;
+result := match x {
+  1 => "One",
+  _ => "Other",
+};
+printf("Result: %s\n", result);
+```
+
+**Output:**
+```
+Result: Other
+```
+
+### Composite Patterns
+
+#### Tuple Patterns
+
+Destructure tuples into individual variables or match against specific tuple structures.
+
+```go
+t := (10, "hello");
+match t {
+  (num, text) => printf("Num: %d, Text: %s\n", num, text),
+  _ => printf("Other\n"),
+};
+```
+
+**Output:**
+```
+Num: 10, Text: hello
+```
+
+#### Struct Patterns
+
+Destructure structs by matching against their field names and optionally binding their values to new variables.
+
+```go
+Point :: struct { x: i32, y: i32 };
+
+p := Point{ x: 100, y: 200 };
+match p {
+  Point{ x: px, y: py } => printf("X: %d, Y: %d\n", px, py),
+  _ => printf("Other\n"),
+};
+```
+
+**Output:**
+```
+X: 100, Y: 200
+```
+
+#### Variant Patterns
+
+Match against specific variants of a sum type and extract their associated data.
+
+```go
+Message :: variant { Quit, Move(i32, i32) };
+
+m := Message.Move(10, 20);
+match m {
+  Message.Move(x, y) => printf("Move to %d, %d\n", x, y),
+  _ => printf("Other\n"),
+};
+```
+
+**Output:**
+```
+Move to 10, 20
+```
+
+#### Array/Slice Patterns
+
+Match against the structure of arrays or slices, including binding elements and using `..` for the rest of the collection.
+
+```go
+arr := [1, 2, 3, 4, 5];
+match arr {
+  [head, ..tail] => printf("Head: %d, Tail length: %d\n", head, tail.len),
+  _ => printf("Other\n"),
+};
+```
+
+**Output:**
+```
+Head: 1, Tail length: 4
+```
+
+### Advanced Patterns
+
+#### `or` Patterns
+
+Combine multiple patterns with `|` to match if any of the sub-patterns match.
+
+```go
+x := 2;
+result := match x {
+  1 | 2 => "One or Two",
+  3 => "Three",
+  _ => "Other",
+};
+printf("Result: %s\n", result);
+```
+
+**Output:**
+```
+Result: One or Two
+```
+
+#### Variable Binding Patterns (`@`)
+
+Use the `@` operator to bind the entire matched value (or a sub-pattern) to a new variable, while still allowing further matching within that value.
+
+```go
+x := 10;
+match x {
+  y @ 10 => printf("Matched 10, bound to y=%d\n", y),
+  _ => printf("Other\n"),
+};
+```
+
+**Output:**
+```
+Matched 10, bound to y=10
+```
+
+#### `if` Guards
+
+Add an `if` condition to a pattern to refine when it matches. The guard expression must evaluate to a boolean.
+
+```go
+x := 15;
+result := match x {
+  y @ (10..20) if y % 2 != 0 => "Odd in range",
+  _ => "Other",
+};
+printf("Result: %s\n", result);
+```
+
+**Output:**
+```
+Result: Odd in range
+```
+
+Pattern matching is a cornerstone of expressive and safe programming in sr-lang, enabling elegant solutions for complex data handling and control flow.

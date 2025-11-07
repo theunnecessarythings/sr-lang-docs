@@ -1,0 +1,87 @@
+---
+title: Pointers
+description: Learn how to work with pointers for low-level memory manipulation in sr-lang.
+template: doc
+order: 0
+---
+
+## Pointers
+
+sr-lang provides **pointers** for low-level memory manipulation. A pointer is a variable that stores the memory address of another value. Pointers are a powerful feature that allow for direct memory access, efficient passing of large data structures, and interoperability with C libraries.
+
+### Creating Pointers
+
+You can create a pointer to a value using the **address-of** operator `&`.
+
+```go
+x := 10;       // A variable holding the value 10
+p := &x;       // `p` is a pointer that holds the memory address of `x`
+```
+
+The type of `p` is `*i32`, which is read as "pointer to an `i32`".
+
+### Dereferencing Pointers
+
+To get the value that a pointer points to, you use the **dereference** operator `.*`.
+
+```go
+x := 10;
+p := &x;
+
+// Dereference `p` to get the value of `x`
+val := p.*;
+
+printf("Dereferenced value: %d\n", val);
+```
+
+**Output:**
+```
+Dereferenced value: 10
+```
+
+### Modifying Data Through Pointers
+
+Pointers can be used to modify the original value they point to. This is often used to allow functions to modify data that is owned by the caller.
+
+```go
+// A procedure that takes a pointer to an i32 and modifies the value
+modify_int :: proc(ptr: *i32) {
+  ptr.* = 20; // Dereference and assign a new value
+}
+
+x := 10;
+printf("Original x: %d\n", x);
+
+// Pass the address of `x` to the procedure
+modify_int(&x);
+
+printf("Modified x: %d\n", x);
+```
+
+**Output:**
+```
+Original x: 10
+Modified x: 20
+```
+
+### Automatic Dereferencing for Field Access
+
+For convenience, sr-lang provides automatic dereferencing when accessing the fields of a struct through a pointer. This means you can use the same dot notation (`.`) to access fields on both a struct value and a pointer to a struct, without needing to explicitly dereference the pointer first.
+
+```go
+Point :: struct { x: i32, y: i32 };
+
+p_val := Point{ x: 10, y: 20 }; // A struct value
+p_ptr := &p_val;                 // A pointer to the struct
+
+// The compiler automatically dereferences `p_ptr`
+// `p_ptr.x` is equivalent to `(p_ptr.*).x`
+printf("Accessed x via pointer: %d\n", p_ptr.x);
+```
+
+**Output:**
+```
+Accessed x via pointer: 10
+```
+
+This feature makes working with pointers to structs as clean and readable as working with the structs directly.

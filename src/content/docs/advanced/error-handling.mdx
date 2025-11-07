@@ -1,0 +1,143 @@
+---
+title: Error Handling
+description: Understand sr-lang's robust error handling mechanisms.
+template: doc
+order: 1
+---
+
+## Error Handling
+
+sr-lang provides a robust and explicit error handling system that encourages developers to deal with potential failures. Unlike languages that rely on exceptions, sr-lang uses **error types** and **error unions** to make errors part of the function signature, ensuring that callers are aware of and handle possible errors.
+
+### Error Types
+
+An **error type** is a collection of named error values. You define an error type using the `error` keyword, similar to an `enum`.
+
+```go
+// Define a custom error type with two possible errors
+MyError :: error { NotFound, PermissionDenied };
+
+// This procedure might return an error of type MyError
+might_fail :: proc() void!MyError {
+  return MyError.NotFound; // Return an error variant
+}
+
+// Call the procedure and handle the error using `catch`
+might_fail() catch |err| {
+  if err == MyError.NotFound {
+    print("Caught NotFound\n");
+  } else {
+    print("Caught other error\n");
+  }
+};
+```
+
+**Output:**
+```
+Caught NotFound
+```
+
+### Error Unions (`!T`)
+
+When a function or procedure can either return a value of type `T` or an error, its return type is an **error union**, denoted by `T!ErrorType`. This explicitly tells the caller that the operation might fail.
+
+```go
+MyError :: error { Failed };
+
+// This function can return an i32 or a MyError.Failed
+might_succeed :: proc() i32!MyError {
+  return 100;
+}
+
+// If might_succeed returns an error, `catch 0` provides a default value.
+r := might_succeed() catch 0;
+print("Result: %d\n", r);
+```
+
+**Output:**
+```
+Result: 100
+```
+
+If the function returns an error, the `catch` block is executed.
+
+```go
+MyError :: error { Failed };
+
+might_fail :: proc() i32!MyError {
+  return MyError.Failed;
+}
+
+r := might_fail() catch 0;
+print("Result: %d\n", r);
+```
+
+**Output:**
+```
+Result: 0
+```
+
+### Error Propagation (`!`) Operator
+
+The `!` operator is used to propagate errors up the call stack. If an error union expression evaluates to an error, the `!` operator immediately returns that error from the current function. If it's a success value, the `!` unwraps it.
+
+```go
+MyError :: error { InnerError };
+
+inner_func :: proc() i32!MyError {
+  return MyError.InnerError;
+}
+
+outer_func :: proc() i32!MyError {
+  // If inner_func returns an error, outer_func will also return that error.
+  return inner_func()!;
+}
+
+outer_func() catch |err| {
+  if err == MyError.InnerError {
+    print("Propagated error caught\n");
+  } else {
+    print("Other error caught\n");
+  }
+};
+```
+
+**Output:**
+```
+Propagated error caught
+```
+
+### `catch` Expression with Error Binding
+
+The `catch` keyword can also bind the error to a variable, allowing for more granular error handling logic.
+
+```go
+MyError :: error { SpecificError, OtherError };
+
+do_something :: proc(fail: bool) i32!MyError {
+  if fail {
+    return MyError.SpecificError;
+  } else {
+    return 10;
+  }
+};
+
+r := do_something(true) catch |err| {
+  if err == MyError.SpecificError {
+    print("Caught specific error\n");
+    -1; // Return -1 if SpecificError
+  } else {
+    print("Caught other error\n");
+    -2; // Return -2 for any other error
+  }
+};
+print("Final result: %d\n", r);
+```
+
+**Output:**
+```
+Caught specific error
+Final result: -1
+```
+
+This explicit approach to error handling ensures that errors are never silently ignored, leading to more robust and reliable software.

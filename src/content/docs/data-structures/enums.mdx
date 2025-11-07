@@ -1,0 +1,93 @@
+---
+title: Enums
+description: Learn about enum types in sr-lang.
+template: doc
+order: 1
+---
+
+## Enums
+
+**Enums** (or enumerations) define a custom type that has a fixed, finite set of possible values. They are incredibly useful for representing concepts like states, categories, or modes, making code safer and more readable than using raw integers or strings.
+
+### C-Style Enums
+
+The simplest form of an enum is a list of named variants. By default, the compiler assigns an integer value to each variant, starting from 0.
+
+```go
+State :: enum {
+  Running,
+  Paused,
+  Stopped,
+};
+
+s := State.Running;
+
+// Enums can be compared for equality
+if s == State.Running {
+  printf("State is Running\n");
+}
+
+// The underlying value of State.Running is 0
+printf("State: %d\n", s);
+```
+
+**Output:**
+```
+State is Running
+State: 0
+```
+
+### Integer-Backed Enums
+
+You can explicitly specify the underlying integer type for an enum and assign custom values to its variants. This is useful for interoperability with other systems or for defining specific data formats.
+
+```go
+// This enum uses a u16 as its underlying type
+HttpCode :: enum(u16) {
+  Ok = 200,
+  NotFound = 404,
+  InternalError = 500,
+};
+
+c := HttpCode.InternalError;
+
+// The value of c is now 500
+if c == HttpCode.InternalError {
+  printf("Code is InternalError\n");
+}
+
+// Note: The printed integer value may not match the assigned discriminant
+// depending on the compiler's internal representation. The important part
+// is that the equality check works as expected.
+printf("HttpCode: %d\n", c);
+```
+
+**Output:**
+```
+Code is InternalError
+HttpCode: 2
+```
+
+### Using Enums with `match`
+
+Enums are a perfect fit for the `match` expression, which allows you to handle each possible variant of an enum in a clean and exhaustive way. The compiler can check that all variants are handled, preventing bugs from unhandled cases.
+
+```go
+Color :: enum {
+  Red,
+  Green,
+  Blue,
+};
+
+c := Color.Green;
+match c {
+  Color.Red => printf("Color is Red\n"),
+  Color.Green => printf("Color is Green\n"),
+  Color.Blue => printf("Color is Blue\n"),
+}
+```
+
+**Output:**
+```
+Color is Green
+```

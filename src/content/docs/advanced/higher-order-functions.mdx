@@ -1,0 +1,53 @@
+---
+title: Higher-Order Functions
+description: Learn about higher-order functions in sr-lang.
+template: doc
+order: 6
+---
+
+## Higher-Order Functions
+
+sr-lang supports **higher-order functions**, which are functions that can take other functions as arguments or return them as results. This is a cornerstone of functional programming and enables highly reusable and abstract code.
+
+### Taking Functions as Arguments
+
+A common example of a higher-order function is `map`, which applies a given function to every element of a collection.
+
+```go
+// 'map' is a higher-order function that takes a function 'f' as an argument.
+map :: proc(list: []i32, f: fn(i32) i32) [dyn]i32 {
+    new_list : [dyn]i32 = []
+    for item in list {
+        new_list.append(f(item))
+    }
+    return new_list
+}
+
+main := proc() {
+    numbers := [1, 2, 3, 4]
+    doubler := |x| x * 2 // A closure (anonymous function)
+
+    // Pass the 'doubler' closure to the 'map' function
+    doubled_numbers := map(numbers, doubler)
+    print("Doubled numbers: ", doubled_numbers) // Expected: [2, 4, 6, 8]
+}
+```
+
+### Returning Functions
+
+A function can also return another function. This is often used to create specialized versions of functions.
+
+```go
+// This higher-order function returns a new function (a closure).
+make_adder :: proc(amount: i32) fn(i32) i32 {
+    add_amount := |x: i32| i32 {
+        return x + amount
+    }
+    return add_amount
+}
+
+main := proc() {
+    add_5 := make_adder(5) // add_5 is now a function that adds 5 to its argument
+    result := add_5(7)      // result is 12
+}
+```

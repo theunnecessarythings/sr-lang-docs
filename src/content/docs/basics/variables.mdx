@@ -1,0 +1,137 @@
+---
+title: Variables and Constants
+description: Learn how to declare variables, constants, and use destructuring in sr-lang.
+template: doc
+order: 0
+---
+
+## Variables and Constants
+
+In sr-lang, you can declare both mutable variables and immutable constants. The syntax is designed to be clear and expressive, supporting both explicit type annotations and type inference.
+
+### Constants
+
+Constants are values that are fixed at compile time and cannot be changed. They are declared using the `::` operator. This is useful for defining values that should never be modified, such as mathematical constants or configuration parameters.
+
+```go
+// Constant declaration
+PI :: 3.14159
+GREETING :: "Hi there"
+
+printf("GREETING=%s\n", GREETING);
+```
+
+**Output:**
+```
+GREETING=Hi there
+```
+
+### Variables
+
+Variables hold data that can change over time. sr-lang offers two primary ways to declare variables, similar to languages like Go or Odin.
+
+#### Type Inference (`:=`)
+
+You can declare a variable and have its type inferred from the initial value using the `:=` operator. This is the most common and idiomatic way to declare variables when the type is clear from the context.
+
+```go
+// The compiler infers the types from the assigned values
+x := 10       // Inferred as i32
+y := 3.14    // Inferred as f64
+b := true    // Inferred as bool
+s := "hello" // Inferred as string
+
+printf("x=%d\n", x);
+```
+
+**Output:**
+```
+x=10
+```
+
+#### Explicit Type Annotation (`:`)
+
+For clarity or when you need to specify a precise type that might differ from the default (e.g., `f32` instead of `f64`), you can use the `:` operator followed by the type.
+
+```go
+x: i32 = 20
+y: f64 = 2.71
+b: bool = false
+s: string = "world"
+
+printf("s=%s\n", s);
+```
+
+**Output:**
+```
+s=world
+```
+
+### Mutability and Reassignment
+
+Variables declared with `:=` or `:` are mutable by default and can be reassigned a new value of the same type.
+
+```go
+x := 10
+printf("x_initial=%d\n", x)
+
+x = 20 // Reassign a new value
+printf("x_reassigned=%d\n", x)
+```
+
+**Output:**
+```
+x_initial=10
+x_reassigned=20
+```
+
+### Destructuring Declarations
+
+sr-lang supports destructuring, a powerful feature that allows you to bind parts of a composite data type (like a tuple or struct) to new variables. This is similar to pattern matching in Rust or destructuring in JavaScript.
+
+#### Tuple Destructuring
+
+You can unpack the elements of a tuple into individual variables.
+
+```go
+(a, b) := (10, 20);
+printf("a=%d, b=%d\n", a, b);
+```
+
+**Output:**
+```
+a=10, b=20
+```
+
+#### Struct Destructuring
+
+Similarly, you can extract values from struct fields into new variables.
+
+```go
+Point :: struct { x: i32, y: i32 };
+
+// The fields of the Point literal are bound to the new variables `a` and `b`
+Point{ x: a, y: b } := Point{ x: 100, y: 200 };
+printf("x=%d, y=%d\n", a, b);
+```
+
+**Output:**
+```
+x=100, y=200
+```
+
+This also works with nested structures, allowing you to deeply unpack complex data.
+
+```go
+Point :: struct { x: i32, y: i32 };
+Rect :: struct { tl: Point, br: Point };
+
+// Destructure a nested Rect
+Rect{ tl: Point{ x: tx, y: ty }, br: Point{ x: bx, y: by } } := Rect{ tl: Point{ x: 0, y: 0 }, br: Point{ x: 10, y: 10 } };
+printf("tx=%d, ty=%d, bx=%d, by=%d\n", tx, ty, bx, by);
+```
+
+**Output:**
+```
+tx=0, ty=0, bx=10, by=10
+```

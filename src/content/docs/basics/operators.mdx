@@ -1,0 +1,203 @@
+--- 
+title: Operators and Casts
+description: Understand operators and type casting in sr-lang.
+template: doc
+order: 2
+---
+
+## Operators and Casts
+
+sr-lang provides a rich set of operators for performing arithmetic, comparisons, and logical operations, as well as a comprehensive system for explicit type casting.
+
+### Arithmetic Operators
+
+Standard arithmetic operators are supported for numeric types.
+
+| Operator | Description    |
+| :------- | :------------- |
+| `+`      | Addition       |
+| `-`      | Subtraction    |
+| `*`      | Multiplication |
+| `/`      | Division       |
+| `%`      | Modulus        |
+
+```go
+// Standard operator precedence is respected (2 * 3 is evaluated first).
+r := 1 + 2 * 3;
+printf("Result: %d\n", r);
+```
+
+**Output:**
+```
+Result: 7
+```
+
+### Comparison Operators
+
+These operators compare two values and return a boolean (`true` or `false`).
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `==`     | Equal to                |
+| `!=`     | Not equal to            |
+| `<`      | Less than               |
+| `>`      | Greater than            |
+| `<=`     | Less than or equal to   |
+| `>=`     | Greater than or equal to|
+
+```go
+r := 10 >= 10;
+printf("Result: %b\n", r);
+```
+
+**Output:**
+```
+Result: 1
+```
+
+### Logical Operators
+
+Logical operators work with boolean values.
+
+| Operator | Description |
+| :------- | :---------- |
+| `and`    | Logical AND |
+| `or`     | Logical OR  |
+| `!`      | Logical NOT |
+
+```go
+// (true and false) is false, then (false or true) is true.
+r := true and false or true;
+printf("Result: %b\n", r);
+```
+
+**Output:**
+```
+Result: 1
+```
+
+### Bitwise Operators
+
+Bitwise operators perform operations on the individual bits of integer types.
+
+| Operator | Description      |
+| :------- | :--------------- |
+| `&`      | Bitwise AND      |
+| `|`      | Bitwise OR       |
+| `^`      | Bitwise XOR      |
+| `<<`     | Left Shift       |
+| `>>`     | Right Shift      |
+
+```go
+// 10 (0b1010) & 12 (0b1100) = 8 (0b1000)
+r := 0b1010 & 0b1100;
+printf("Result: %d\n", r);
+```
+
+**Output:**
+```
+Result: 8
+```
+
+### Assignment Operators
+
+Compound assignment operators provide a shorthand for performing an operation and assigning the result back to the variable.
+
+```go
+x := 10;
+x += 5; // Equivalent to x = x + 5
+printf("x=%d\n", x);
+```
+
+**Output:**
+```
+x=15
+```
+
+### Type Casting
+
+sr-lang uses postfix operators for explicit type casting, providing clear and safe ways to convert between types.
+
+#### Normal Cast: `.(T)`
+
+This is the standard cast for converting between types. For numeric types, it truncates when converting from a float to an integer.
+
+```go
+x := 123.45;
+y := x.(i32); // y becomes 123
+printf("Result: %d\n", y);
+```
+
+**Output:**
+```
+Result: 123
+```
+
+#### Bitcast: `.^T`
+
+A bitcast reinterprets the raw bits of a value as a different type of the same size, without changing the bit pattern.
+
+```go
+// IEEE 754 representation of 123.456
+some_bits: u32 = 0x42F6E979;
+bits_as_float := some_bits.^f32;
+printf("Result: %f\n", bits_as_float.(f64));
+```
+
+**Output:**
+```
+Result: 123.456001
+```
+
+#### Saturating Cast: `.|T`
+
+If the value is outside the representable range of the target type, it is clamped to the target type's minimum or maximum value.
+
+```go
+big_int: i32 = 99999;
+// 99999 is greater than i8::MAX (127), so it saturates.
+saturated_to_i8 := big_int.|i8;
+printf("Result: %d\n", saturated_to_i8);
+```
+
+**Output:**
+```
+Result: 127
+```
+
+#### Wrapping Cast: `.%T`
+
+If the value is outside the representable range, it wraps around (modular arithmetic).
+
+```go
+x: i32 = -1;
+// -1 wraps around to the maximum value of an unsigned 8-bit integer.
+r := x.%u8;
+printf("Result: %d\n", r);
+```
+
+**Output:**
+```
+Result: 255
+```
+
+#### Checked Cast: `.?T`
+
+A checked cast returns an optional type. If the conversion is successful, it returns `Some(value)`; otherwise, it returns `null`.
+
+```go
+// 200 is outside the range of i8 (-128 to 127).
+x: i32 = 200;
+r := x.?i8;
+
+if r != null {
+  printf("Result: %d\n", r?);
+} else {
+  printf("Result: null\n");
+}
+```
+
+**Output:**
+```
+Result: null
+```

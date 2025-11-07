@@ -1,0 +1,60 @@
+---
+title: Reflection
+description: Understand compile-time reflection capabilities in sr-lang.
+template: doc
+order: 5
+---
+
+## Reflection
+
+sr-lang provides **reflection** capabilities primarily at **compile time**. This allows you to inspect and query information about types and values during the compilation process, enabling powerful metaprogramming techniques such as generic code generation, serialization, and debugging tools.
+
+### Compile-Time Type Information
+
+The `type_of` operator and `get_type_by_name` function are key tools for compile-time reflection. They allow you to obtain a unique identifier or metadata about a type.
+
+```go
+// Assume these are built-in or imported reflection functions
+printf :: extern proc(string, any) void;
+comptime_print :: proc(string, any) void;
+get_type_by_name :: proc(string) u32;
+type_of :: extern proc(any) u32;
+
+main :: proc() {
+    Color :: struct { r: u8, g: u8, b: u8 };
+    color := Color{ r: 255, g: 0, b: 0 };
+
+    comptime {
+        a : i32 = 1123123;
+        b := 1341;
+
+        // Get the type ID of the 'color' variable
+        a_type := type_of(color);
+        printf("Color type ID: %d\n", a_type);
+
+        // Get the type ID of a type by its name
+        i32_tid := get_type_by_name("i32");
+        comptime_print("get_type_by_name was called.\n");
+        printf("i32 type ID: %d\n", i32_tid);
+    }
+}
+```
+
+**Output (at compile time, not runtime):**
+```
+Color type ID: <some_id>
+i32 type ID: <some_id>
+```
+
+> **Note:** The exact numeric IDs for types (`<some_id>`) are internal to the compiler and may vary. The important aspect is that they are unique identifiers for each type.
+
+### Use Cases for Compile-Time Reflection
+
+Compile-time reflection is a powerful tool for:
+
+-   **Serialization/Deserialization:** Automatically generating code to convert data structures to and from various formats (e.g., JSON, binary) by inspecting their fields and types.
+-   **Generic Algorithms:** Writing generic functions that can adapt their behavior based on the properties of the types they operate on.
+-   **Debugging and Diagnostics:** Generating compile-time reports or assertions about the structure of your types.
+-   **Foreign Function Interface (FFI):** Generating bindings to C libraries by inspecting C header files and creating corresponding sr-lang types and function declarations.
+
+By performing reflection at compile time, sr-lang ensures that all type-related operations are resolved before runtime, leading to highly optimized and efficient code without the overhead typically associated with runtime reflection in other languages.

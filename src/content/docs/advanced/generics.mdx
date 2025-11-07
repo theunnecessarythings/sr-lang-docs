@@ -1,0 +1,93 @@
+---
+title: Generics
+description: Learn about generic programming and compile-time specialization in sr-lang.
+template: doc
+order: 0
+---
+
+## Generics
+
+sr-lang supports **generics**, a powerful feature that allows you to write code that works with multiple types without having to duplicate the code for each type. This promotes code reusability and helps in building flexible and type-safe abstractions. Generics in sr-lang are primarily handled through **compile-time specialization**, similar to how Zig handles generics.
+
+### Generic Functions
+
+You can define functions that operate on generic types. The `comptime` keyword is used to indicate that a parameter is a compile-time known value, such as a `type` or a `usize` (size type).
+
+```go
+// A generic function `max` that works for any comparable type `T`
+max :: fn(comptime T: type, a: T, b: T) T {
+  return if a > b { a } else { b };
+}
+
+// A generic function `clamp` that constrains a value within a limit
+clamp :: fn(comptime T: type, comptime Limit: T, value: T) T {
+  return if value > Limit { Limit } else { value };
+}
+
+// When calling, you explicitly provide the concrete type for `T`
+printf("%d\n", max(i32, 10, 7));
+printf("%d\n", clamp(i32, 5, 42));
+```
+
+**Output:**
+```
+10
+5
+```
+
+At compile time, the compiler will generate a specialized version of `max` and `clamp` for `i32`. This process is called **monomorphization**.
+
+### Generic Data Structures
+
+You can also define generic data structures, such as structs, that can hold elements of a generic type or have their size determined by a compile-time parameter.
+
+```go
+// A generic `Vec` struct that holds an array of `N` elements of type `T`
+Vec :: fn(comptime T: type, comptime N: usize) type {
+  return struct { data: [N]T };
+}
+
+// Instantiate `Vec` with concrete types and sizes
+top := Vec(i32, 3){ data: [1, 2, 3] };
+bottom := Vec(i32, 3){ data: [4, 5, 6] };
+
+printf("%d,%d,%d|%d,%d,%d\n", top.data[0], top.data[1], top.data[2], bottom.data[0], bottom.data[1], bottom.data[2]);
+```
+
+**Output:**
+```
+1,2,3|4,5,6
+```
+
+### Nested Generic Types
+
+Generics can be nested, allowing you to build complex generic data structures from simpler ones. For example, a `Matrix` can be defined using the generic `Vec`.
+
+```go
+Vec :: fn(comptime T: type, comptime N: usize) type {
+  return struct { data: [N]T };
+}
+
+// A generic `Matrix` struct composed of `R` rows, each being a `Vec` of `C` elements
+Matrix :: fn(comptime T: type, comptime R: usize, comptime C: usize) type {
+  Row :: Vec(T, C);
+  return struct { rows: [R]Row };
+}
+
+// Define a specific matrix type: 2x3 matrix of i32
+MatrixI32x2x3 :: Matrix(i32, 2, 3);
+
+// Instantiate and access elements
+row0 := Vec(i32, 3){ data : [1, 2, 3] };
+row1 := Vec(i32, 3){ data : [4, 5, 6] };
+mat := MatrixI32x2x3{ rows : [row0, row1] };
+
+printf("%d,%d\n", mat.rows[0].data[2], mat.rows[1].data[0]);
+```
+
+**Output:**
+```
+3,4
+```
+
+This demonstrates how generic programming in sr-lang enables the creation of highly flexible and reusable code components that are specialized at compile time for optimal performance.

@@ -1,0 +1,156 @@
+--- 
+title: Control Flow
+description: Learn about conditional statements, loops, and pattern matching in sr-lang.
+template: doc
+order: 3
+---
+
+## Control Flow
+
+sr-lang provides a range of familiar and powerful constructs for directing the flow of execution in your programs.
+
+### `if-else` Expressions
+
+The `if-else` construct allows for conditional execution. It can be used as a statement or as an expression that returns a value.
+
+#### As a Statement
+
+Used for conditional side-effects.
+
+```go
+if 10 > 5 {
+  printf("Greater\n");
+} else {
+  printf("Not greater\n");
+}
+```
+
+**Output:**
+```
+Greater
+```
+
+#### As an Expression
+
+When used as an expression, both the `if` and `else` branches must return a value of the same type.
+
+```go
+x := 10;
+result := if x > 5 {
+  100
+} else {
+  200
+};
+printf("Result: %d\n", result);
+```
+
+**Output:**
+```
+Result: 100
+```
+
+### Loops
+
+Iteration is handled with `while` and `for` loops.
+
+#### `while` Loops
+
+A `while` loop executes a block of code as long as a condition is true.
+
+```go
+i := 0;
+while i < 3 {
+  printf("Loop iteration: %d\n", i);
+  i = i + 1;
+}
+printf("Loop finished\n");
+```
+
+**Output:**
+```
+Loop iteration: 0
+Loop iteration: 1
+Loop iteration: 2
+Loop finished
+```
+
+#### `for` Loops
+
+A `for` loop iterates over a sequence, such as a range or an array.
+
+```go
+// Iterate over an exclusive range (0, 1, 2)
+sum := 0;
+for i in 0..3 {
+  sum = sum + i.(i64);
+}
+printf("Sum: %d\n", sum);
+```
+
+**Output:**
+```
+Sum: 3
+```
+
+### `match` Expressions
+
+sr-lang features a powerful `match` expression for exhaustive pattern matching, similar to Rust. It can be used to deconstruct and inspect data in a safe and expressive way.
+
+#### Matching on Literals
+
+You can match against simple literal values.
+
+```go
+x := 2;
+result := match x {
+  1 => 10,
+  2 => 20,
+  _ => 30, // The wildcard `_` is a catch-all case
+};
+printf("Result: %d\n", result);
+```
+
+**Output:**
+```
+Result: 20
+```
+
+#### Matching on Variants
+
+`match` is particularly useful for working with `variant` types, allowing you to safely access the data within each variant.
+
+```go
+Message :: variant { Quit, Move(i32, i32) };
+
+m := Message.Move(10, 20);
+match m {
+  Message.Move(x, y) => printf("Move to %d, %d\n", x, y),
+  _ => printf("Other message\n"),
+}
+```
+
+**Output:**
+```
+Move to 10, 20
+```
+
+#### `if` Guards
+
+You can add an `if` condition to a pattern for more complex matching logic.
+
+```go
+x := 15;
+result := match x {
+  y if y < 10 => "Small",
+  y if y >= 10 and y < 20 => "Medium",
+  _ => "Large",
+};
+printf("Size: %s\n", result);
+```
+
+**Output:**
+```
+Size: Medium
+```
+
+For a deeper dive into all the supported patterns, see the [Pattern Matching](/advanced/pattern-matching) documentation.

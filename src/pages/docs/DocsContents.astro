@@ -17,9 +17,14 @@ const docsByCate = docsCollection.reduce((acc: { [key: string]: typeof docsColle
 }, {})
 
 const docCategories = {
-  setup: 'Setup',
-  integrations: 'Integrations',
-  advanced: 'Advanced'
+  introduction: 'Introduction',
+  basics: 'Basics',
+  'data-structures': 'Data Structures',
+  advanced: 'Advanced',
+  metaprogramming: 'Metaprogramming',
+  'low-level-ffi': 'Low-Level FFI',
+
+  reference: 'Reference',
 }
 
 type Props = {

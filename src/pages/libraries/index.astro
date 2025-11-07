@@ -1,0 +1,63 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+
+const headings = [
+  { depth: 2, slug: 'libraries', text: 'Libraries' },
+]
+
+export const libraries = [
+  {
+    name: 'Raylib',
+    image: 'raylib.svg',
+    description: 'A simple and easy-to-use library to enjoy video games programming.',
+    links: [
+      { type: 'doc', href: '/language/docs/examples/raylib_basic' },
+    ]
+  },
+  {
+    name: 'Skia',
+    image: 'skia.svg',
+    description: '2D graphic library for drawing Text, Geometries, and Images.',
+    links: [
+      { type: 'doc', href: '/language/docs/examples/skia_basic' },
+    ]
+  },
+  {
+    name: 'GLFW3',
+    image: 'glfw3.svg',
+    description: 'For creating windows with OpenGL contexts and managing input and events.',
+    links: [
+      { type: 'doc', href: '/language/docs/examples/glfw3_basic' },
+    ]
+  },
+  {
+    name: 'Torch',
+    image: 'pytorch.svg',
+    description: 'Machine learning framework, the one everyone uses',
+    links: [
+      { type: 'doc', href: '/language/docs/examples/torch_basic' },
+    ]
+  },
+  {
+    name: 'Triton',
+    image: 'triton-logo.png',
+    description: 'A language and compiler for writing highly efficient custom Deep-Learning primitives.',
+    links: [
+      { type: 'doc', href: '/language/docs/examples/tir_liveness_demo' },
+    ]
+  },
+]
+---
+
+<PageLayout title='Libraries' {headings}>
+  <p>
+    sr-lang provides experimental support for a number of vendored libraries, allowing you to build a wide range of applications, from games and graphical user interfaces to machine learning models.
+  </p>
+  <p>
+    <strong>Note:</strong> These libraries are currently experimental and their APIs may change in the future.
+  </p>
+
+  <h2 id='libraries'>Libraries</h2>
+  <ProjectSection projects={libraries} />
+</PageLayout>

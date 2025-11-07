@@ -1,0 +1,76 @@
+---
+title: Keywords
+description: A comprehensive list of reserved keywords in sr-lang.
+template: doc
+order: 0
+---
+
+## Keywords
+
+Keywords are reserved words that have special meaning in sr-lang and cannot be used as identifiers (e.g., variable names, function names). Understanding the keywords is fundamental to writing valid sr-lang code.
+
+Here is a comprehensive list of all keywords in sr-lang, categorized by their primary use:
+
+### Declarations and Definitions
+
+*   `package`: Declares the current package.
+*   `extern`: Declares a function or variable defined in an external library.
+*   `proc`: Defines a procedure (a function that does not return a value).
+*   `fn`: Defines a function (a function that returns a value).
+*   `struct`: Defines a structure (a composite data type).
+*   `enum`: Defines an enumeration (a type with a fixed set of named values).
+*   `variant`: Defines a variant (a sum type, also known as a tagged union).
+*   `union`: Defines a union (a type that can hold one of several types in the same memory location).
+*   `error`: Defines a custom error type.
+*   `type`: Used in `comptime` contexts to refer to a type.
+*   `const`: Used in Zig test harness, but `::` is for constants in sr-lang.
+
+### Control Flow
+
+*   `if`: Conditional execution.
+*   `else`: Alternative branch for `if` statements.
+*   `while`: Loop construct.
+*   `for`: Loop construct for iteration.
+*   `break`: Exits a loop or `match` expression.
+*   `continue`: Skips the rest of the current loop iteration.
+*   `match`: Pattern matching expression.
+*   `return`: Exits a function or procedure and optionally returns a value.
+*   `defer`: Schedules code to be run when the current scope exits, regardless of how it exits.
+*   `errdefer`: Schedules code to be run when the current scope exits due to an error.
+*   `unreachable`: Indicates that a code path should never be reached.
+
+### Type-Related Keywords
+
+*   `any`: A type that can hold any value (dynamic typing).
+*   `string`: Built-in string type.
+*   `void`: Represents the absence of a value (used for procedures).
+*   `bool`: Boolean type (`true` or `false`).
+*   `char`: Character type.
+*   `usize`: Unsigned integer type, guaranteed to be the size of a pointer.
+*   `i32`, `i64`, `u8`, `u16`, `u32`: Integer types of various sizes and signedness.
+*   `f32`, `f64`: Floating-point types.
+*   `dyn`: Used with arrays to denote a dynamic array.
+*   `tensor`: Used for tensor types.
+*   `simd`: Used for SIMD vector types.
+*   `undefined`: Represents an uninitialized value.
+*   `null`: Represents the absence of a value for optional types.
+
+### Metaprogramming and Advanced Features
+
+*   `comptime`: Marks code to be executed at compile time.
+*   `code`: Captures a block of code as an Abstract Syntax Tree (AST) at compile time.
+*   `insert`: Inserts a `code` block (AST) into the program at compile time.
+*   `mlir`: Embeds raw MLIR (Multi-Level Intermediate Representation) into the code.
+*   `asm`: Defines a function body using inline assembly.
+*   `async`: Marks a function or procedure as asynchronous.
+*   `await`: Pauses an `async` function until a `Promise` resolves.
+
+### Operators (Keyword-like)
+
+*   `and`: Logical AND operator.
+*   `or`: Logical OR operator.
+*   `is`: Used in `while is` loops for pattern matching.
+*   `catch`: Used in error handling to provide a fallback value or handle an error.
+*   `orelse`: Used in error handling to provide a fallback value when an optional is `null`.
+
+This list provides a quick reference to the fundamental building blocks of the sr-lang language. Each keyword plays a specific role in defining the structure, behavior, and advanced capabilities of your programs.

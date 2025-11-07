@@ -1,0 +1,70 @@
+---
+title: Unions
+description: Learn about union data types in sr-lang.
+template: doc
+order: 3
+---
+
+## Unions
+
+A **Union** is a data structure that can hold values of different types in the same memory location. Unlike a `struct`, where each field has its own memory, all fields of a `union` share the same memory space. This makes unions useful for C interoperability and for situations where you need to interpret the same raw data in multiple ways.
+
+> **Warning:** Unions are not type-safe. It is up to you, the programmer, to know which field is currently active. Accessing the wrong field can lead to undefined behavior by misinterpreting the underlying data. For type-safe alternatives, a **`variant`** is almost always a better choice.
+
+### Defining and Using Unions
+
+You define a `union` with a list of fields, similar to a `struct`. You can initialize one field at a time. When you assign a value to a different field, that new field becomes the *active* field, and the memory is reinterpreted according to its type.
+
+```go
+IntOrFloat :: union { i: i32, f: f32 };
+
+// Initialize the union with an integer value
+u := IntOrFloat{ i: 123 };
+printf("Union as int: %d\n", u.i);
+```
+
+**Output:**
+```
+Union as int: 123
+```
+
+### Switching the Active Field
+
+When you assign to a different field of the union, the active field changes. The underlying memory is now interpreted as the new type.
+
+```go
+IntOrFloat :: union { i: i32, f: f64 };
+
+u := IntOrFloat{ i: 123 };
+
+// Now, assign a float value. The `f` field becomes active.
+u.f = 456.78;
+printf("Union as float: %f\n", u.f);
+
+// Reading `u.i` now would produce an incorrect value
+// because the bits represent a float.
+```
+
+**Output:**
+```
+Union as float: 456.780000
+```
+
+Unions can hold fields of any type, but you must be careful to only access the field that you last wrote to.
+
+```go
+Value :: union { b: bool, s: string };
+
+v := Value{ b: true };
+printf("Union as bool: %b\n", v.b);
+
+// Switch the active field to a string
+v.s = "hello";
+printf("Union as string: %s\n", v.s);
+```
+
+**Output:**
+```
+Union as bool: 1
+Union as string: hello
+```

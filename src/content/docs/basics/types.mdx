@@ -1,0 +1,221 @@
+---
+title: Primitive Types
+description: Explore the fundamental data types available in sr-lang.
+template: doc
+order: 1
+---
+
+## Primitive Types
+
+sr-lang provides a rich set of built-in primitive types for representing numbers, characters, and boolean values. These form the building blocks for more complex data structures.
+
+### Integers
+
+Integer literals can be specified in several bases and can include separators for readability.
+
+- **Decimal:** `123`, `-456`
+- **Hexadecimal:** `0xFF`
+- **Octal:** `0o755`
+- **Binary:** `0b1011_0011`
+
+Numeric separators (`_`) are allowed for readability and are ignored by the compiler.
+
+```go
+// Decimal integer
+x := 123;
+printf("x=%d\n", x);
+
+// Hexadecimal with digit separators
+y := 0x_FF_00;
+printf("y=%d\n", y);
+```
+
+**Output:**
+```
+x=123
+y=65280
+```
+
+Available integer types include signed (`i8`, `i16`, `i32`, `i64`) and unsigned (`u8`, `u16`, `u32`, `u64`), as well as pointer-sized integers `isize` and `usize`.
+
+### Floating-Point Numbers
+
+Floating-point numbers are used for values with a fractional component. They can be written in standard decimal notation or scientific E-notation.
+
+```go
+// Standard float
+x := 123.45;
+printf("x=%f\n", x);
+
+// Scientific notation (negative exponent)
+y := 1.0e-3;
+printf("y=%f\n", y);
+```
+
+**Output:**
+```
+x=123.450000
+y=0.001000
+```
+
+The primary floating-point types are `f32` (single-precision) and `f64` (double-precision).
+
+### Booleans
+
+The `bool` type represents a truth value and can be either `true` or `false`. Booleans are fundamental for control flow.
+
+```go
+x := true and false;
+printf("x=%b\n", x);
+
+if true {
+    printf("True branch\n");
+} else {
+    printf("False branch\n");
+}
+```
+
+**Output:**
+```
+x=0
+True branch
+```
+
+### Characters
+
+A `char` literal represents a single Unicode scalar value and is enclosed in single quotes. It supports standard escape sequences.
+
+```go
+c := 'A';
+printf("c=%c\n", c);
+
+// Escaped newline character
+newline := '\n';
+printf("newline=%c", newline);
+```
+
+**Output:**
+```
+c=A
+newline=
+
+```
+
+### Strings
+
+String literals are sequences of characters enclosed in double quotes. They support escape sequences for special characters.
+
+```go
+// A string with a newline and a tab
+s := "Line1\n\tLine2";
+printf("s=%s\n", s);
+```
+
+**Output:**
+```
+s=Line1
+	Line2
+
+```
+
+**Raw Strings:**
+
+For strings where escape sequences should be ignored, you can use raw string literals, prefixed with `r` and optionally delimited by one or more `#` symbols.
+
+```go
+// In a raw string, backslashes are treated as literal characters.
+s := r"No\nEscapes";
+printf("s=%s\n", s);
+```
+
+**Output:**
+```
+s=No\nEscapes
+```
+
+## Composite Types
+
+Composite types are built from primitive types and other composite types.
+
+### Structs
+
+**Structs** are composite data types that group together named fields. They are ideal for creating custom data records.
+
+```go
+Point :: struct { x: i32, y: i32 }
+
+p := Point{ x: 10, y: 20 }
+printf("Point: (%d, %d)\n", p.x, p.y)
+```
+
+**Output:**
+```
+Point: (10, 20)
+```
+
+### Enums
+
+**Enums** define a type with a fixed set of named values, useful for representing states or categories.
+
+```go
+State :: enum { Running, Paused, Stopped }
+
+s := State.Running
+if s == State.Running {
+  printf("State is Running\n")
+}
+```
+
+**Output:**
+```
+State is Running
+```
+
+### Variants
+
+**Variants** (or sum types) are types that can hold a value of one of several different kinds, each with its own optional data. They are highly effective for modeling diverse states in a type-safe way.
+
+```go
+Message :: variant { Quit, Move(i32, i32) }
+
+m := Message.Move(10, 20)
+match m {
+  Message.Move(x, y) => printf("Move to %d, %d\n", x, y),
+  _ => printf("Other message\n"),
+}
+```
+
+**Output:**
+```
+Move to 10, 20
+```
+
+### Tuples
+
+**Tuples** are fixed-size, ordered collections where each element can have a different type.
+
+```go
+t := (1, "hello", true)
+printf("Tuple: (%d, %s, %b)\n", t.0, t.1, t.2)
+```
+
+**Output:**
+```
+Tuple: (1, hello, 1)
+```
+
+### Arrays
+
+**Arrays** are fixed-size, homogeneous collections of elements.
+
+```go
+arr: [3]i32 = [1, 2, 3]
+printf("Array: %d, %d, %d\n", arr[0], arr[1], arr[2])
+```
+
+**Output:**
+```
+Array: 1, 2, 3
+```
+
+For more details on these types, please see the dedicated pages in the **Data Structures** section.

@@ -1,0 +1,141 @@
+---
+title: Functions
+description: Define and use functions and procedures in sr-lang.
+template: doc
+order: 4
+---
+
+## Functions and Procedures
+
+In sr-lang, executable blocks of code are defined as either **functions** or **procedures**. They are the primary way to organize and reuse code.
+
+### Functions (`fn`)
+
+A function is a block of code that accepts inputs (parameters), performs some computation, and **always returns a value**. They are declared using the `fn` keyword.
+
+```go
+// A function that takes two integers and returns their sum.
+add :: fn(a: i32, b: i32) i32 {
+    return a + b;
+}
+
+r := add(5, 7);
+printf("Result=%d\n", r);
+```
+
+**Output:**
+```
+Result=12
+```
+
+Functions can have multiple `return` statements. The first one encountered will exit the function and provide the return value.
+
+```go
+get_status :: fn(c: i32) string {
+  if c == 200 { return "OK"; }
+  if c == 404 { return "Not Found"; }
+  return "Unknown";
+}
+
+printf("Status 200=%s\n", get_status(200));
+```
+
+**Output:**
+```
+Status 200=OK
+```
+
+### Procedures (`proc`)
+
+A procedure is similar to a function but **does not return a value**. Procedures are used for operations that have side effects, such as printing to the console or modifying state.
+
+```go
+// A procedure that takes two integers and prints their sum.
+print_sum :: proc(a: i32, b: i32) {
+    printf("Sum=%d\n", a + b);
+}
+
+print_sum(10, 20);
+```
+
+**Output:**
+```
+Sum=30
+```
+
+### Default Arguments
+
+Function and procedure parameters can have default values, making them optional at the call site. This provides a convenient way to create flexible APIs.
+
+```go
+configure :: proc(name: string, id: i32 = 0, active: bool = true) {
+    printf("Name=%s, ID=%d, Active=%d\n", name, id, active);
+};
+
+configure("UserA");
+configure("UserB", 10);
+configure("UserC", 20, false);
+```
+
+**Output:**
+```
+Name=UserA, ID=0, Active=1
+Name=UserB, ID=10, Active=1
+Name=UserC, ID=20, Active=0
+```
+
+### Special Function Types
+
+sr-lang supports several special kinds of functions for advanced use cases.
+
+#### Async Functions
+
+Functions and procedures can be marked as `async` to perform non-blocking operations. These are covered in detail in the [Async/Await](/advanced/async-await) section.
+
+```go
+my_async_fn :: async fn() i32 { return 100; };
+
+r := my_async_fn().await;
+printf("Async fn returned %d\n", r);
+```
+
+**Output:**
+```
+Async fn returned 100
+```
+
+#### Extern Functions
+
+Functions defined in external libraries (typically C libraries) can be declared with `extern`. This is the basis of sr-lang's Foreign Function Interface (FFI).
+
+```go
+// Declares a function `my_extern_fn` from a linked C library.
+my_extern_fn :: extern proc(a: i32, b: i32) i32;
+
+r := my_extern_fn(5, 7);
+printf("Extern fn returned %d\n", r);
+```
+
+**Output:**
+```
+Extern fn returned 12
+```
+
+#### Assembly Functions
+
+For maximum low-level control, function bodies can be written directly in assembly language using the `asm` keyword.
+
+```go
+add_asm :: fn(a: i64, b: i64) i64 asm {
+  mov rax, a
+  add rax, b
+};
+
+r := add_asm(10, 20);
+printf("ASM result=%d\n", r);
+```
+
+**Output:**
+```
+ASM result=30
+```

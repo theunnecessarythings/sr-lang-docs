@@ -1,0 +1,75 @@
+---
+title: 'A Deep Dive into Metaprogramming in sr-lang'
+publishDate: 2025-11-07
+description: 'Explore the powerful metaprogramming capabilities of sr-lang, including `comptime`, `code`, and `insert`.'
+tags:
+  - sr-lang
+  - Metaprogramming
+  - Advanced
+language: 'English'
+heroImage: { src: './thumbnail.jpg', color: '#3B82F6' }
+---
+
+## Metaprogramming in sr-lang
+
+sr-lang provides a powerful set of metaprogramming features that allow you to write code that generates or modifies other code at compile time. This enables you to write more generic, efficient, and expressive code. The core of sr-lang's metaprogramming capabilities revolves around three keywords: `comptime`, `code`, and `insert`.
+
+### `comptime`: Compile-Time Execution
+
+The `comptime` keyword allows you to execute code at compile time. This is useful for pre-calculating values, generating lookup tables, or performing other computations that can be done before the program runs.
+
+```go
+comptime {
+    // This code runs at compile time
+    x := 10;
+    y := 20;
+    z := x + y;
+    printf("The compile-time sum is: %d\n", z);
+}
+```
+
+### `code`: Capturing Code as Data
+
+The `code` keyword allows you to capture a block of sr-lang code as an Abstract Syntax Tree (AST). This AST can then be manipulated at compile time.
+
+```go
+comptime {
+    my_code := code {
+        printf("Hello from a code block!\n");
+    };
+    // my_code now holds the AST for the printf call
+}
+```
+
+### `insert`: Injecting Code
+
+The `insert` keyword allows you to inject a `code` block (AST) into the program. This is where the magic happens, as you can generate and insert code dynamically at compile time.
+
+```go
+comptime {
+    my_code := code {
+        printf("Hello from an inserted code block!\n");
+    };
+    insert my_code;
+}
+```
+
+When the program is compiled, the `insert my_code;` line is replaced with the code inside the `my_code` block.
+
+### A Practical Example: Generic Functions
+
+By combining `comptime`, `code`, and `insert`, you can create highly generic functions that are specialized at compile time. For example, you can create a generic `max` function that works for any numeric type.
+
+```go
+max :: fn(comptime T: type, a: T, b: T) T {
+    return if a > b { a } else { b };
+}
+
+// At compile time, the compiler generates a specialized version of `max` for i32
+max_i32 := max(i32, 10, 20);
+
+// And another for f64
+max_f64 := max(f64, 3.14, 2.71);
+```
+
+Metaprogramming in sr-lang is a powerful tool that can help you write more efficient and reusable code. By understanding and utilizing `comptime`, `code`, and `insert`, you can unlock a new level of programming power.

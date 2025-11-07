@@ -1,0 +1,101 @@
+---
+title: 'Expressive Pattern Matching in sr-lang'
+publishDate: 2025-11-11
+description: 'A comprehensive guide to using `match` expressions in sr-lang for powerful and expressive code.'
+tags:
+  - sr-lang
+  - Pattern Matching
+  - Control Flow
+language: 'English'
+heroImage: { src: './thumbnail.jpg', color: '#8B5CF6' }
+---
+
+## Expressive Pattern Matching in sr-lang
+
+sr-lang's `match` expression is a powerful control flow construct that allows you to compare a value against a series of patterns and execute code based on which pattern matches. This is a more expressive and powerful alternative to traditional `if-else` or `switch` statements.
+
+### Basic Usage
+
+A `match` expression takes a value and a series of arms, each with a pattern and a corresponding expression to execute.
+
+```go
+x := 2;
+result := match x {
+    1 => "One",
+    2 => "Two",
+    _ => "Other", // The wildcard `_` matches any value
+};
+// result is "Two"
+```
+
+### Matching on Different Types
+
+`match` expressions can be used with a wide variety of types, including literals, ranges, enums, variants, and structs.
+
+#### Literals and Ranges
+
+```go
+match x {
+    1 | 2 => "One or Two",
+    3..=5 => "Three to Five",
+    _ => "Other",
+}
+```
+
+#### Enums and Variants
+
+```go
+Color :: enum { Red, Green, Blue };
+
+match my_color {
+    Color.Red => "It's red!",
+    Color.Green => "It's green!",
+    Color.Blue => "It's blue!",
+}
+
+Message :: variant { Quit, Move(i32, i32) };
+
+match my_message {
+    Message.Quit => printf("Quit message\n"),
+    Message.Move(x, y) => printf("Move to %d, %d\n", x, y),
+}
+```
+
+#### Structs
+
+```go
+Point :: struct { x: i32, y: i32 };
+
+match my_point {
+    Point{ x: 0, y: 0 } => "Origin",
+    Point{ x: px, y: py } => printf("Point at %d, %d\n", px, py),
+}
+```
+
+### `if` Guards
+
+You can add an `if` guard to a pattern to provide an additional condition that must be met for the pattern to match.
+
+```go
+match x {
+    y if y < 10 => "Small",
+    y if y >= 10 and y < 20 => "Medium",
+    _ => "Large",
+}
+```
+
+### `while is` Loops
+
+Pattern matching can also be used in `while is` loops to destructure a value and loop as long as the pattern matches.
+
+```go
+Option :: variant { None, Some(i32) };
+maybe_value := Option.Some(42);
+
+while is Option.Some(x) := maybe_value {
+    printf("The value is: %d\n", x);
+    maybe_value = Option.None; // Exit the loop
+}
+```
+
+sr-lang's `match` expression is a versatile and powerful tool that can make your code more expressive, readable, and robust. By mastering pattern matching, you can write more elegant and maintainable code.

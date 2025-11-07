@@ -1,0 +1,87 @@
+---
+title: Tuples
+description: Learn about tuple data types in sr-lang.
+template: doc
+order: 4
+---
+
+## Tuples
+
+**Tuples** are simple, ordered, fixed-size collections of elements. Each element in a tuple can have a different type. They are useful for grouping a small number of related values together without the need to create a formal `struct`.
+
+### Creating Tuples
+
+You create a tuple by enclosing a comma-separated list of values in parentheses `()`.
+
+```go
+// A tuple containing an integer, a string, and a boolean
+t := (1, "hello", true);
+```
+
+### Accessing Tuple Elements
+
+Elements of a tuple are accessed by their index using dot notation, starting from zero.
+
+```go
+t := (10, 20, 30);
+
+first := t.0;
+second := t.1;
+
+printf("First: %d, Second: %d\n", first, second);
+```
+
+**Output:**
+```
+First: 10, Second: 20
+```
+
+### Nested Tuples
+
+Tuples can contain other tuples, allowing for nested data structures.
+
+```go
+// A nested tuple
+t := (1, ("nested", 2.5), true);
+
+// Access nested elements by chaining the index operators
+printf("Nested: %d, %s, %f, %b\n", t.0, t.1.0, t.1.1, t.2);
+```
+
+**Output:**
+```
+Nested: 1, nested, 2.500000, 1
+```
+
+### Destructuring Tuples
+
+One of the most powerful features of tuples is the ability to destructure them into individual variables. This allows you to easily unpack the elements of a tuple in a single, concise statement.
+
+```go
+// The tuple (10, 20) is destructured into variables `a` and `b`
+(a, b) := (10, 20);
+
+printf("a=%d, b=%d\n", a, b);
+```
+
+**Output:**
+```
+a=10, b=20
+```
+
+This is especially useful when a function returns multiple values via a tuple.
+
+```go
+get_coordinates :: fn() (i32, i32) {
+    return (100, 200);
+}
+
+// Destructure the returned tuple directly into `x` and `y`
+(x, y) := get_coordinates();
+printf("Coordinates: (%d, %d)\n", x, y);
+```
+
+**Output:**
+```
+Coordinates: (100, 200)
+```

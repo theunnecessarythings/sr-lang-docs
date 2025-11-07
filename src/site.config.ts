@@ -3,11 +3,11 @@ import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } fro
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'Astro Theme Pure',
+  title: 'Sr Lang',
   /** Will be used in index page & copyright declaration */
-  author: 'Pure Lab',
+  author: 'Sr Lang',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'Stay hungry, stay foolish',
+  description: 'a language written just for me',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/language/favicon/favicon.ico',
   /** Specify the default language for this site. */
@@ -24,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: 'src/assets/avatar.png',
+    src: 'src/assets/avatar.webp',
     alt: 'Avatar'
   },
 
@@ -49,61 +49,36 @@ export const theme: ThemeUserConfig = {
     menu: [
       { title: 'Blog', link: '/language/blog' },
       { title: 'Docs', link: '/language/docs' },
-      { title: 'Projects', link: '/language/projects' },
-      { title: 'Links', link: '/language/links' },
-      { title: 'About', link: '/language/about' }
+      { title: 'Libraries', link: '/language/libraries' },
+      // { title: 'Links', link: '/language/links' },
+      // { title: 'About', link: '/language/about' }
     ]
   },
 
   /** Configure the footer of your site. */
   footer: {
-    // Year format
     year: `© ${new Date().getFullYear()}`,
-    // year: `© 2019 - ${new Date().getFullYear()}`,
     links: [
-      // Registration link
-      {
-        title: 'Moe ICP 114514',
-        link: 'https://icp.gov.moe/?keyword=114514',
-        style: 'text-sm' // Uno/TW CSS class
-      },
-      {
-        title: 'Travelling',
-        link: 'https://www.travellings.cn/go.html',
-        style: 'text-sm'
-      },
-      // Privacy Policy link
-      {
-        title: 'Site Policy',
-        link: '/language/terms/list',
-        pos: 2 // position set to 2 will be appended to copyright line
-      }
+    
     ],
-    /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
-    /** Optional details about the social media accounts for this site. */
-    social: { github: 'https://github.com/cworld1/astro-theme-pure' }
+    social: { github: 'https://github.com/theunnecessarythings/sr-lang' }
   },
 
   content: {
-    /** External links configuration */
     externalLinks: {
       content: ' ↗',
-      /** Properties for the external links element */
       properties: {
         style: 'user-select:none'
       }
     },
     /** Blog page size for pagination (optional) */
-    blogPageSize: 8,
-    // Currently support weibo, x, bluesky
-    share: ['weibo', 'x', 'bluesky']
+    blogPageSize: 10,
+    share: ['x', 'bluesky']
   }
 }
 
 export const integ: IntegrationUserConfig = {
-  // Links management
-  // See: https://astro-pure.js.org/docs/integrations/links
   links: {
     // Friend logbook
     logbook: [
@@ -121,29 +96,16 @@ export const integ: IntegrationUserConfig = {
       { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
     ]
   },
-  // Enable page search function
   pagefind: true,
-  // Add a random quote to the footer (default on homepage footer)
-  // See: https://astro-pure.js.org/docs/integrations/advanced#web-content-render
   quote: {
-    // https://developer.hitokoto.cn/sentence/#%E8%AF%B7%E6%B1%82%E5%9C%B0%E5%9D%80
-    // server: 'https://v1.hitokoto.cn/?c=i',
-    // target: (data) => (data as { hitokoto: string }).hitokoto || 'Error'
-    // https://github.com/lukePeavey/quotable
     server: 'https://api.quotable.io/quotes/random?maxLength=60',
     target: `(data) => data[0].content || 'Error'`
   },
-  // UnoCSS typography
-  // See: https://unocss.dev/presets/typography
   typography: {
     class: 'prose text-base text-muted-foreground',
-    // The style of blockquote font, normal or italic (default to italic in typography)
     blockquoteStyle: 'italic',
-    // The style of inline code block, code or modern (default to code in typography)
     inlineCodeBlockStyle: 'modern'
   },
-  // A lightbox library that can add zoom effect
-  // See: https://astro-pure.js.org/docs/integrations/others#medium-zoom
   mediumZoom: {
     enable: true, // disable it will not load the whole library
     selector: '.prose .zoomable',
@@ -151,14 +113,10 @@ export const integ: IntegrationUserConfig = {
       className: 'zoomable'
     }
   },
-  // Comment system
   waline: {
     enable: true,
-    // Server service link
     server: 'https://astro-theme-pure-waline.arthals.ink/',
-    // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
-    // Refer https://waline.js.org/en/reference/client/props.html
     additionalConfigs: {
       // search: false,
       pageview: true,

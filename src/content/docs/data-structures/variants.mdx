@@ -1,0 +1,113 @@
+---
+title: Variants
+description: Learn about variant (sum type) data types in sr-lang.
+template: doc
+order: 2
+---
+
+## Variants (Sum Types)
+
+**Variants**, also known as **sum types** or **tagged unions**, are a powerful feature for defining a type that can be one of several different kinds, or *variants*. Each variant can have different data associated with it, making them perfect for modeling state, handling different kinds of messages, or representing complex data that doesn't fit a single structure.
+
+Unlike a `union`, a `variant` is type-safe because the compiler knows which variant is currently active.
+
+### Defining Variants
+
+A `variant` is defined with a list of possible variants. Each variant can be a simple tag, or it can contain a payload of data in either a tuple-like or struct-like form.
+
+```go
+// A variant representing different user events
+Event :: variant {
+    // A simple variant with no data
+    PageLoad,
+
+    // A variant with a tuple-like payload
+    KeyPress(char),
+
+    // A variant with a struct-like payload
+    Click { x: i32, y: i32 },
+}
+```
+
+### Creating and Using Variants
+
+You create an instance of a variant by specifying one of its variants and providing the required data, if any.
+
+#### Unit-like Variants
+
+These are the simplest variants, acting as simple tags.
+
+```go
+Message :: variant { Quit, Move(i32, i32) };
+
+m := Message.Quit;
+match m {
+  Message.Quit => printf("Quit message\n"),
+  _ => printf("Other message\n"),
+}
+```
+
+**Output:**
+```
+Quit message
+```
+
+#### Tuple-like Variants
+
+These variants hold an ordered list of data, like a tuple.
+
+```go
+Message :: variant { Quit, Move(i32, i32) };
+
+m := Message.Move(10, 20);
+match m {
+  Message.Move(x, y) => printf("Move to %d, %d\n", x, y),
+  _ => printf("Other message\n"),
+}
+```
+
+**Output:**
+```
+Move to 10, 20
+```
+
+#### Struct-like Variants
+
+These variants hold named fields, just like a struct.
+
+```go
+Event :: variant { Click { x: i32, y: i32 }, KeyPress(char) };
+
+e := Event.Click{ x: 100, y: 200 };
+match e {
+  Event.Click{ x, y } => printf("Click at %d, %d\n", x, y),
+  _ => printf("Other event\n"),
+}
+```
+
+**Output:**
+```
+Click at 100, 200
+```
+
+### Nested Variants
+
+Variants can be nested to model even more complex, hierarchical data structures.
+
+```go
+Inner :: variant { A(i32), B };
+Outer :: variant { Wrap(Inner), Unwrap };
+
+o := Outer.Wrap(Inner.A(50));
+match o {
+  Outer.Wrap(Inner.A(val)) => printf("Nested A with value %d\n", val),
+  _ => printf("Other nested variant\n"),
+}
+```
+
+**Output:**
+```
+Nested A with value 50
+```
+
+The primary way to interact with the data inside a variant is through a `match` expression, which ensures that all possible variants are handled safely. See the [Control Flow](/basics/control-flow) page for more on pattern matching.

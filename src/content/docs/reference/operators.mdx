@@ -1,0 +1,132 @@
+---
+title: Operators
+description: A comprehensive reference of all operators in sr-lang.
+template: doc
+order: 1
+---
+
+## Operators
+
+Operators are special symbols or keywords that perform operations on one or more operands. sr-lang provides a rich set of operators for various purposes, including arithmetic, comparison, logic, assignment, and type manipulation.
+
+This page serves as a quick reference. For more detailed explanations and examples, refer to the [Operators and Casts](/basics/operators) section.
+
+### Arithmetic Operators
+
+| Operator | Description                                  |
+| :------- | :------------------------------------------- |
+| `+`      | Addition (also for complex numbers)          |
+| `-`      | Subtraction                                  |
+| `*`      | Multiplication (also for complex numbers)    |
+| `/`      | Division                                     |
+| `%`      | Modulo                                       |
+| `+%`     | Wrapping Addition                            |
+| `-%`     | Wrapping Subtraction                         |
+| `*`      | Wrapping Multiplication                      |
+| `/`      | Wrapping Division                            |
+| `%`      | Wrapping Modulo                              |
+| `+|`     | Saturating Addition                          |
+| `-|`     | Saturating Subtraction                       |
+| `*|`     | Saturating Multiplication                    |
+| `/|`     | Saturating Division                          |
+| `%|`     | Saturating Modulo                            |
+
+### Assignment Operators
+
+| Operator | Description                                  |
+| :------- | :------------------------------------------- |
+| `:=`     | Declaration with type inference              |
+| `=`      | Assignment                                   |
+| `::`     | Constant declaration                         |
+| `+=`     | Add and assign                               |
+| `-=`     | Subtract and assign                          |
+| `*=`     | Multiply and assign                          |
+| `/=`     | Divide and assign                            |
+| `%=`     | Modulo and assign                            |
+| `+%=`    | Wrapping add and assign                      |
+| `*|=`    | Saturating multiply and assign               |
+
+### Comparison Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `==`     | Equal to                |
+| `!=`     | Not equal to            |
+| `<`      | Less than               |
+| `>`      | Greater than            |
+| `<=`     | Less than or equal to   |
+| `>=`     | Greater than or equal to|
+
+### Logical Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `and`    | Logical AND             |
+| `or`     | Logical OR              |
+| `!`      | Logical NOT             |
+
+### Bitwise Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `&`      | Bitwise AND             |
+| `|`      | Bitwise OR              |
+| `^`      | Bitwise XOR             |
+| `<<`     | Left Shift              |
+| `>>`     | Right Shift             |
+| `<<|`    | Saturating Left Shift   |
+
+### Pointer and Memory Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `&`      | Address-of              |
+| `.*`     | Dereference             |
+
+### Type Casting Operators
+
+| Operator | Description                                  |
+| :------- | :------------------------------------------- |
+| `.(T)`   | Normal Cast (e.g., `x.(i32)`)                |
+| `.^T`    | Bitcast (reinterprets bits)                  |
+| `.|T`    | Saturating Cast (clamps to min/max)          |
+| `.%T`    | Wrapping Cast (wraps around)                 |
+| `.?T`    | Checked Cast (returns optional)              |
+
+### Range Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `..`     | Exclusive Range         |
+| `..=`    | Inclusive Range         |
+
+### Pattern Matching Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `|`      | OR pattern              |
+| `@`      | Variable binding        |
+| `_`      | Wildcard                |
+
+### Error Handling Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `!`      | Error propagation       |
+| `catch`  | Error handling block    |
+| `orelse` | Fallback for optionals/errors |
+
+### Optional Type Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `?`      | Optional type prefix    |
+| `?`      | Optional unwrap         |
+| `?.`     | Optional chaining       |
+
+### Other Operators
+
+| Operator | Description             |
+| :------- | :---------------------- |
+| `[]`     | Array/Slice indexing    |
+| `.`      | Member access           |

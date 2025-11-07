@@ -1,0 +1,71 @@
+---
+title: Inline Assembly
+description: Learn how to write inline assembly functions in sr-lang.
+template: doc
+order: 2
+---
+
+## Inline Assembly
+
+For the most demanding low-level programming tasks, sr-lang allows you to write functions directly in assembly language. This feature, known as **inline assembly**, gives you maximum control over the generated machine code, which can be crucial for performance-critical code, hardware interaction, or implementing specific CPU instructions.
+
+### Assembly Functions
+
+To create an assembly function, you replace the normal function body (the block enclosed in `{}`) with the `asm` keyword followed by a block containing the assembly code as a multi-line string.
+
+```go
+// An assembly function that adds two 64-bit integers
+add_asm :: fn(a: i64, b: i64) i64 asm {
+  mov rax, a
+  add rax, b
+};
+```
+
+### How It Works
+
+When you define an assembly function, the sr-lang compiler handles the difficult parts of the Application Binary Interface (ABI) for you:
+
+1.  **Function Prologue and Epilogue:** The compiler generates the necessary code to set up the stack frame when the function is called and to clean it up when the function returns.
+2.  **Argument Passing:** The compiler ensures that the function's arguments (e.g., `a` and `b` in the example) are available in the correct registers or stack locations, as specified by the target platform's calling convention. You can refer to them by name in your assembly code.
+3.  **Return Value:** The compiler expects the return value to be placed in a specific register (commonly `rax` on x86-64 platforms) before the function ends.
+
+This allows you to focus on the core logic of your assembly code without getting bogged down in the details of calling conventions.
+
+### Using Assembly Functions
+
+Once defined, you can call an assembly function just like any other sr-lang function.
+
+```go
+add_asm :: fn(a: i64, b: i64) i64 asm {
+  mov rax, a
+  add rax, b
+};
+
+r := add_asm(10, 20);
+printf("ASM result=%d\n", r);
+```
+
+**Output:**
+```
+ASM result=30
+```
+
+Here is another example that uses a different register for the calculation before moving the final result to `rax` for returning.
+
+```go
+sub_asm :: fn(a: i64, b: i64) i64 asm {
+  mov rdx, a
+  sub rdx, b
+  mov rax, rdx
+};
+
+r := sub_asm(50, 15);
+printf("ASM sub result=%d\n", r);
+```
+
+**Output:**
+```
+ASM sub result=35
+```
+
+> **Warning:** Inline assembly is a powerful but platform-specific feature. Assembly code written for one architecture (e.g., x86-64) will not work on another (e.g., ARM). Use it judiciously when you have a clear need for low-level control that cannot be achieved through other means.

@@ -1,0 +1,77 @@
+---
+title: Built-ins
+description: A reference of built-in functions, types, and constants available in sr-lang.
+template: doc
+order: 2
+---
+
+## Built-ins
+
+sr-lang provides a set of built-in functions, types, and constants that are implicitly available for use in your programs. These built-ins are fundamental to the language and provide core functionality for various tasks.
+
+### Built-in Functions and Procedures
+
+These are functions or procedures that are available globally or through special mechanisms.
+
+*   `printf(format: string, ...args: any)`: An external procedure (like C's `printf`) for formatted output to the console. [See: Functions](/basics/functions)
+    ```go
+    printf("Hello, %s! The answer is %d\n", "World", 42);
+    // Output: Hello, World! The answer is 42
+    ```
+*   `assert(condition: bool)`: A procedure that checks a boolean condition. If the condition is false, the program will terminate (typically used for debugging or ensuring invariants). [See: Keywords](/reference/keywords)
+    ```go
+    assert(1 + 1 == 2);
+    ```
+*   `exit(code: i32) -> noreturn`: An external procedure that terminates the program with the given exit code. [See: noreturn below](#built-in-types)
+*   `typeof(value: any) -> type`: A compile-time procedure that returns the type of a given value. [See: Reflection](/advanced/reflection)
+    ```go
+    comptime {
+        t_int := typeof(10);
+        // t_int would represent the i32 type
+    }
+    ```
+
+### Built-in Types
+
+sr-lang includes a range of primitive and composite types that are available by default.
+
+#### Primitive Types
+
+*   `void`: Represents the absence of a value (used as the return type for procedures).
+*   `string`: Represents a sequence of characters. [See: Primitive Types](/basics/types)
+*   `bool`: Represents a boolean value (`true` or `false`). [See: Primitive Types](/basics/types)
+*   `char`: Represents a single Unicode scalar value. [See: Primitive Types](/basics/types)
+*   **Integers**: `i8`, `i16`, `i32`, `i64` (signed) and `u8`, `u16`, `u32`, `u64` (unsigned) for various bit-widths. [See: Primitive Types](/basics/types)
+*   **Pointer-sized Integers**: `isize`, `usize` (signed and unsigned integers guaranteed to be the size of a pointer on the target architecture). [See: Primitive Types](/basics/types)
+*   **Floating-Point Numbers**: `f32`, `f64` for single and double-precision floating-point numbers. [See: Primitive Types](/basics/types)
+
+#### Special Types
+
+*   `any`: A special type that can hold a value of any type. Primarily used in metaprogramming or specific FFI scenarios where types are unknown at compile-time. [See: Metaprogramming](/advanced/metaprogramming)
+*   `noreturn`: A special return type for functions/procedures that never return (e.g., functions that terminate the program or enter an infinite loop). [See: Keywords](/reference/keywords)
+*   `code`: Represents a block of sr-lang source code as an Abstract Syntax Tree (AST) at compile time. Used in metaprogramming. [See: Metaprogramming](/advanced/metaprogramming)
+*   `simd(T: type, N: usize)`: A type constructor for Single Instruction, Multiple Data (SIMD) vector types, allowing for parallel operations on multiple data elements. `T` is the element type and `N` is the number of elements.
+    ```go
+    vec: simd(f32, 4) = [1.0, 2.0, 3.0, 4.0];
+    ```
+*   `tensor(T: type, ...dims: usize)`: A type constructor for multi-dimensional tensor types, used for numerical computing and machine learning. `T` is the element type and `dims` are the dimensions of the tensor.
+    ```go
+    matrix: tensor(f32, 2, 2) = [[1.0, 2.0], [3.0, 4.0]];
+    ```
+
+### Built-in Constants
+
+These constants have special meaning.
+
+*   `null`: Represents the absence of a value for optional types (`?T`). [See: Tuples and Optionals](/data-structures/tuples)
+*   `undefined`: Represents an uninitialized value. Using `undefined` can lead to runtime errors or unexpected behavior if the value is read before being initialized.
+
+### Built-in Properties/Methods
+
+Certain types expose built-in properties or methods to interact with their data.
+
+*   `.len`: Property for arrays, slices, dynamic arrays, and maps to get their current length/size. [See: Arrays and Slices](/data-structures/arrays-and-slices), [Dynamic Arrays](/data-structures/dynamic-arrays), [Maps](/data-structures/maps)
+*   `.capacity`: Property for dynamic arrays to get their currently allocated capacity. [See: Dynamic Arrays](/data-structures/dynamic-arrays)
+*   `.real`, `.imag`: Properties for complex number types to access their real and imaginary parts. [See: Primitive Types](/basics/types)
+*   `.append(element: T)`: Method for dynamic arrays to add an element to the end. [See: Dynamic Arrays](/data-structures/dynamic-arrays)
+*   `.remove(key: K)`: Method for maps to remove an element by its key. [See: Maps](/data-structures/maps)

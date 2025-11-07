@@ -1,0 +1,55 @@
+---
+title: Block Expressions
+description: Using blocks of code as expressions in sr-lang.
+template: doc
+order: 6
+---
+
+## Block Expressions
+
+In sr-lang, a block of code enclosed in curly braces `{}` can be used as an expression. The last expression in the block is the value that the block evaluates to. This is a powerful feature that allows for more complex logic to be embedded directly where a value is expected.
+
+### Basic Usage
+
+A block expression can be used to initialize a variable with a value that requires multiple steps to compute.
+
+```go
+x := {
+    a := 10;
+    b := 20;
+    a + b; // This is the value the block returns
+};
+// x is now 30
+```
+
+### Scoping
+
+Variables declared inside a block expression are local to that block and do not pollute the outer scope.
+
+```go
+outer_var := 10;
+{
+    inner_var := 20;
+    printf("Inner var: %d\n", inner_var);
+}
+// inner_var is not accessible here
+printf("Outer var: %d\n", outer_var);
+```
+
+### Nested Blocks
+
+Block expressions can be nested, allowing for more complex and structured code.
+
+```go
+x := {
+    y := {
+        1 + 1;
+    };
+    y * 3;
+};
+// x is now 6
+```
+
+Block expressions are a versatile feature that can help in writing cleaner and more organized code, especially when dealing with complex initializations or computations.
+
+```

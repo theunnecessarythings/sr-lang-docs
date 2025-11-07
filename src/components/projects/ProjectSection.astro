@@ -38,30 +38,48 @@ const projectIconSet: Record<string, iconsType> = {
       projects.map((project) => {
         var imagePath = null
         if (project.image) {
-    imagePath = '/src/assets/projects/' + project.image
-          if (!images[imagePath])
-            throw new Error(
+              imagePath = '/src/assets/projects/' + project.image
+              const isSvg = project.image?.endsWith('.svg')
+              if (!images[imagePath] && !isSvg)            throw new Error(
               `"${imagePath}" does not exist in glob: "src/assets/projects/*.{jpeg,jpg,png,gif,avif.webp}"`
             )
         }
+        const isSvg = project.image?.endsWith('.svg')
 
         return (
           <div class='relative overflow-hidden rounded-xl border'>
             {imagePath && (
-              <Image
-                class='absolute end-0 z-0 m-0 h-full w-1/2 object-cover opacity-40'
-                src={images[imagePath]()}
-                alt={project.name}
-                loading='lazy'
-                style={{
-                  maskImage:
-                    'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
-                  msMaskImage:
-                    '-ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
-                  WebkitMaskImage:
-                    '-webkit-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
-                }}
-              />
+              isSvg ? (
+                <img
+                  class='absolute end-0 z-0 m-0 h-full w-1/2 object-cover opacity-40'
+                  src={imagePath}
+                  alt={project.name}
+                  loading='lazy'
+                  style={{
+                    maskImage:
+                      'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                    msMaskImage:
+                      '-ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                    WebkitMaskImage:
+                      '-webkit-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
+                  }}
+                />
+              ) : (
+                <Image
+                  class='absolute end-0 z-0 m-0 h-full w-1/2 object-cover opacity-40'
+                  src={images[imagePath]()}
+                  alt={project.name}
+                  loading='lazy'
+                  style={{
+                    maskImage:
+                      'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                    msMaskImage:
+                      '-ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                    WebkitMaskImage:
+                      '-webkit-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
+                  }}
+                />
+              )
             )}
             <div
               class={cn(

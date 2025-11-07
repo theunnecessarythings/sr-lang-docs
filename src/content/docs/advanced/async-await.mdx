@@ -1,0 +1,81 @@
+---
+title: Async/Await
+description: Explore asynchronous programming with async/await in sr-lang.
+template: doc
+order: 2
+---
+
+## Async/Await
+
+sr-lang provides built-in support for **asynchronous programming** using the `async` and `await` keywords. This allows you to write non-blocking code that can perform long-running operations (like network requests or file I/O) without freezing the main execution thread. This model is particularly useful for building responsive applications and efficient servers.
+
+### `async` Functions and Procedures
+
+You can declare a function or a procedure as `async` by adding the `async` keyword before `fn` or `proc`. An `async` function always returns a `Promise` (or similar future-like object) that will eventually resolve to the function's return value. An `async` procedure returns a `Promise` that resolves to `void`.
+
+```go
+// An async procedure that prints a message
+my_async_proc :: async proc() {
+  printf("Async proc started\n");
+};
+
+// An async function that returns an integer
+my_async_fn :: async fn() i32 {
+  return 100;
+};
+```
+
+### `await` Keyword
+
+The `await` keyword is used to pause the execution of an `async` function until a `Promise` has resolved. When `await` is encountered, the current `async` function yields control back to the event loop, allowing other tasks to run. Once the `Promise` resolves, the `async` function resumes from where it left off.
+
+```go
+// Call an async procedure and await its completion
+my_async_proc().await;
+printf("Async proc finished\n");
+```
+
+**Output:**
+```
+Async proc started
+Async proc finished
+```
+
+When awaiting an `async` function, the `await` keyword unwraps the `Promise` and gives you the actual return value.
+
+```go
+r := my_async_fn().await;
+printf("Async fn returned %d\n", r);
+```
+
+**Output:**
+```
+Async fn returned 100
+```
+
+### Chaining Asynchronous Operations
+
+You can chain multiple asynchronous operations by calling and awaiting them sequentially. The `await` keyword ensures that each task completes before the next one begins in the current `async` context.
+
+```go
+async_task1 :: async proc() { printf("Task 1\n"); };
+async_task2 :: async proc() { printf("Task 2\n"); };
+
+// Tasks will execute in order
+async_task1().await;
+async_task2().await;
+```
+
+**Output:**
+```
+Task 1
+Task 2
+```
+
+### Concurrency vs. Parallelism
+
+It's important to understand that `async/await` in sr-lang primarily enables **concurrency**, not necessarily **parallelism**. Concurrency means that multiple tasks can make progress independently, often by interleaving their execution on a single thread. Parallelism means that multiple tasks are executing simultaneously on different CPU cores.
+
+sr-lang's `async/await` model allows your program to efficiently manage many concurrent operations without the overhead of traditional multi-threading, leading to highly scalable and responsive applications.
+
+```

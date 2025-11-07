@@ -1,0 +1,59 @@
+---
+title: 'Modern Concurrency with Async/Await in sr-lang'
+publishDate: 2025-11-10
+description: 'Learn how to write asynchronous code in sr-lang using the `async` and `await` keywords.'
+tags:
+  - sr-lang
+  - Concurrency
+  - Async
+  - Await
+language: 'English'
+heroImage: { src: './thumbnail.jpg', color: '#10B981' }
+---
+
+## Modern Concurrency with Async/Await in sr-lang
+
+sr-lang provides a modern and intuitive way to write asynchronous code using the `async` and `await` keywords. This allows you to write non-blocking code that is easy to read and understand, without the complexities of callbacks or manual state management.
+
+### `async`: Defining Asynchronous Functions
+
+The `async` keyword is used to define a function or procedure that runs asynchronously. An `async` function immediately returns a `Promise` that will be resolved with the function's return value when it completes.
+
+```go
+my_async_fn :: async fn() i32 {
+    // ... perform some long-running operation ...
+    return 100;
+};
+```
+
+### `await`: Waiting for Promises
+
+The `await` keyword is used to pause the execution of an `async` function until a `Promise` is resolved. This allows you to write asynchronous code that looks and feels like synchronous code.
+
+```go
+main :: async proc() {
+    promise := my_async_fn();
+    result := promise.await; // Pauses until the promise is resolved
+    printf("The result is: %d\n", result);
+};
+```
+
+### A Practical Example: Fetching Data
+
+Here's a more practical example of how you might use `async` and `await` to fetch data from a network resource:
+
+```go
+fetch_data :: async fn(url: string) string {
+    // ... implementation to fetch data from the URL ...
+    return "Some data from the network";
+};
+
+main :: async proc() {
+    data := fetch_data("https://example.com").await;
+    printf("Received data: %s\n", data);
+};
+```
+
+In this example, the `main` procedure calls `fetch_data` and `await`s the result. This allows other code to run while the network request is in progress, making your application more responsive.
+
+By embracing `async` and `await`, sr-lang makes it easy to write high-performance, non-blocking code that is both efficient and easy to maintain. Whether you're building a web server, a network client, or a GUI application, sr-lang's concurrency features will help you write better, more responsive software.

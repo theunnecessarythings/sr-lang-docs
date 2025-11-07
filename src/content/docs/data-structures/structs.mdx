@@ -1,0 +1,87 @@
+---
+title: Structs
+description: Learn about struct data types in sr-lang.
+template: doc
+order: 0
+---
+
+## Structs
+
+**Structs** are composite data types that allow you to group together related data under a single name. Each piece of data in a struct is called a **field**, and each field has its own name and type. Structs are one of the most common ways to create more complex and meaningful data structures in your programs.
+
+### Defining and Instantiating Structs
+
+You define a struct using the `struct` keyword, followed by a block containing the field definitions.
+
+To create an instance of a struct, you use the struct name followed by a literal block where you provide values for the fields.
+
+```go
+// Define a struct named `Point`
+Point :: struct { x: i32, y: i32 };
+
+// Create an instance of the Point struct
+p := Point{ x: 10, y: 20 };
+
+// Access the fields using dot notation
+printf("Point: (%d, %d)\n", p.x, p.y);
+```
+
+**Output:**
+```
+Point: (10, 20)
+```
+
+Structs can contain fields of any type, including other structs, allowing you to build up complex, nested data structures.
+
+```go
+// A struct can contain fields of different primitive types
+User :: struct { id: i32, name: string, active: bool };
+
+u := User{ id: 1, name: "Alice", active: true };
+printf("User: %d, %s, %b\n", u.id, u.name, u.active);
+```
+
+**Output:**
+```
+User: 1, Alice, 1
+```
+
+### Nested Structs
+
+You can nest structs to create hierarchical data. For example, a `Rect` can be composed of two `Point` structs.
+
+```go
+Point :: struct { x: i32, y: i32 };
+Rect  :: struct { tl: Point, br: Point }; // tl: top-left, br: bottom-right
+
+// Instantiate the nested struct
+r := Rect{ tl: Point{ x: 0, y: 0 }, br: Point{ x: 10, y: 10 } };
+
+// Access nested fields using chained dot notation
+printf("Rect: (%d, %d) to (%d, %d)\n", r.tl.x, r.tl.y, r.br.x, r.br.y);
+```
+
+**Output:**
+```
+Rect: (0, 0) to (10, 10)
+```
+
+### Struct Update Syntax
+
+sr-lang supports a functional update syntax that allows you to create a new struct instance based on an existing one, while changing only the fields you specify. The `..` syntax copies the remaining fields from the source struct.
+
+```go
+Point :: struct { x: i32, y: i32 };
+
+p1 := Point{ x: 10, y: 20 };
+
+// Create p2 with a new `x` value, but copy the `y` value from p1
+p2 := Point{ x: 5, ..p1 };
+
+printf("P2: (%d, %d)\n", p2.x, p2.y);
+```
+
+**Output:**
+```
+P2: (5, 20)
+```

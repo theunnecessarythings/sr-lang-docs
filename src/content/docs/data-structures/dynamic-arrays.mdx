@@ -1,0 +1,95 @@
+---
+title: Dynamic Arrays
+description: Learn about dynamically-sized arrays in sr-lang.
+template: doc
+order: 6
+---
+
+## Dynamic Arrays
+
+While fixed-size **arrays** are efficient, their size must be known at compile time. For situations where you need a collection that can grow or shrink at runtime, sr-lang provides **dynamic arrays**. A dynamic array is a heap-allocated, resizable container for a sequence of elements of the same type.
+
+### Defining Dynamic Arrays
+
+You define a dynamic array using the `[dyn]T` type syntax, where `T` is the type of the elements.
+
+```go
+// Create an empty dynamic array of integers
+numbers: [dyn]i32 = [];
+
+printf("Initial length: %d\n", numbers.len);
+```
+
+**Output:**
+```
+Initial length: 0
+```
+
+### Adding Elements
+
+The primary way to add elements to a dynamic array is with the `append` method, which adds an element to the end of the collection.
+
+```go
+numbers: [dyn]i32 = [];
+
+// Add elements to the dynamic array
+numbers.append(10);
+numbers.append(20);
+
+printf("Length after append: %d\n", numbers.len);
+printf("First element: %d\n", numbers[0]);
+```
+
+**Output:**
+```
+Length after append: 2
+First element: 10
+```
+
+### Length and Capacity
+
+A dynamic array manages its own memory and consists of three main parts:
+
+- **Pointer:** A pointer to a block of memory on the heap where the elements are stored.
+- **Length (`len`):** The number of elements currently in the array.
+- **Capacity (`capacity`):** The total number of elements the allocated memory block can hold before it needs to be reallocated.
+
+When you `append` an element and the length equals the capacity, the dynamic array will automatically allocate a new, larger block of memory and copy the old elements over. This process ensures that appending is an efficient operation on average.
+
+```go
+numbers: [dyn]i32 = [];
+numbers.append(1);
+numbers.append(2);
+numbers.append(3);
+
+// The capacity is managed automatically and will always be
+// greater than or equal to the length.
+printf("Capacity >= Length: %b\n", numbers.capacity >= numbers.len);
+```
+
+**Output:**
+```
+Capacity >= Length: 1
+```
+
+### Iterating Over a Dynamic Array
+
+You can iterate over the elements of a dynamic array using a standard `for` loop, just like with a fixed-size array.
+
+```go
+numbers: [dyn]i32 = [];
+numbers.append(1);
+numbers.append(2);
+
+sum : i32 = 0;
+for n in numbers {
+    sum = sum + n;
+}
+
+printf("Sum of elements: %d\n", sum);
+```
+
+**Output:**
+```
+Sum of elements: 3
+```

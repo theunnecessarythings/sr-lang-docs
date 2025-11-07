@@ -1,0 +1,55 @@
+---
+title: Getting Started
+description: How to build and run the sr-lang compiler and examples.
+template: doc
+order: 1
+--- 
+
+## 🚀 Getting Started
+
+To build and run the compiler, you will need:
+
+*   **Zig Compiler:** The project is built using Zig.
+*   **LLVM/MLIR Development Libraries:** The compiler links against MLIR for its backend. 
+
+### Building LLVM/MLIR
+
+```bash
+git clone https://github.com/llvm/llvm-project
+export LLVM_HOME=llvm-project
+
+# Install libc++
+sudo apt install libc++-dev libc++abi-dev # For Ubuntu/Debian
+cd llvm-project
+mkdir build
+cd build
+CXXFLAGS=-stdlib=libc++ cmake -G Ninja ../llvm    -DLLVM_ENABLE_PROJECTS=mlir     -DLLVM_TARGETS_TO_BUILD="Native;NVPTX;AMDGPU"    -DCMAKE_BUILD_TYPE=Release    -DLLVM_ENABLE_ASSERTIONS=ON  -DCMAKE_C_COMPILER="clang" -DCMAKE_CXX_COMPILER="clang++" -DLLVM_ENABLE_LLD=ON
+ninja
+cmake --install .
+```
+
+### Building the Compiler
+
+Navigate to the root of the `sr-lang` repository and run:
+
+```bash
+zig build
+```
+
+This command will compile the `sr-lang` compiler executable.
+
+### Running Examples
+
+**Please Note:** As of now, only the `examples/hello.sr` example is fully functional and runnable. Other examples demonstrate language features and syntax but may not compile or execute correctly yet.
+
+To run the "hello world" example:
+
+```bash
+zig build run -- examples/hello.sr
+```
+
+Alternatively, after building, you can directly run the executable:
+
+```bash
+./zig-out/bin/sr_lang examples/hello.sr
+```

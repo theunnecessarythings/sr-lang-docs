@@ -1,0 +1,149 @@
+---
+title: Metaprogramming
+description: Explore sr-lang's metaprogramming capabilities for compile-time code generation and manipulation.
+template: doc
+order: 4
+---
+
+## Metaprogramming
+
+sr-lang offers powerful **metaprogramming** features, allowing you to write code that generates or manipulates other code at compile time. This enables highly flexible and efficient abstractions, reducing boilerplate and improving performance. The core of sr-lang's metaprogramming revolves around the `comptime` keyword and `code` blocks.
+
+### Compile-Time Execution (`comptime`)
+
+The `comptime` keyword marks a block of code or an expression to be executed entirely at compile time. This is useful for:
+
+-   **Assertions:** Ensuring invariants hold during compilation.
+-   **Code Generation:** Producing code based on compile-time logic.
+-   **Data Generation:** Creating lookup tables or other data structures at compile time.
+
+```go
+test1 :: proc() {
+    comptime {
+        // This code runs during compilation
+        assert(1 + 1 == 2);
+        print("Hello from the compiler!\n");
+    }
+}
+```
+
+**Output (at compile time, not runtime):**
+```
+Hello from the compiler!
+```
+
+### Code as Data (`code` blocks)
+
+The `code` keyword allows you to capture a block of sr-lang source code as a compile-time value, representing its Abstract Syntax Tree (AST). This AST can then be manipulated by other `comptime` code before being inserted back into the program.
+
+```go
+// This procedure returns an AST representing an `add` function
+build_add_function :: proc() Code {
+    return code {
+        add := fn(a: i32, b: i32) i32 { return a + b }
+    }
+}
+
+test2 :: proc() {
+    comptime {
+        // Get the AST for an `add` function
+        add_func_ast := build_add_function();
+
+        // The `insert` statement splices the AST into the program here.
+        // After this, an `add` function will exist at the global scope.
+        insert add_func_ast;
+    }
+}
+
+// Now the `add` function can be used, because it was inserted at compile time.
+result := add(10, 20);
+printf("Result of inserted add function: %d\n", result);
+```
+
+**Output:**
+```
+Result of inserted add function: 30
+```
+
+### AST Manipulation
+
+`code` blocks, when combined with `comptime`, enable powerful AST manipulation. You can inspect, modify, and generate code programmatically.
+
+```go
+// Hypothetical comptime function to change the RHS literal of a binary operation
+change_rhs_literal :: proc(ast_node: Code, new_val: any) Code {
+    // In a real scenario, you'd use a standard library for AST manipulation
+    // For demonstration, assume direct field access and a helper for literals
+    // comptime assert(ast_node.kind == AstKind.BinaryOperation)
+    // comptime assert(ast_node.rhs.kind == AstKind.Literal)
+
+    // ast_node.rhs = std.ast.make_literal(new_val)
+    return code { 10 + new_val }; // Simplified for example
+}
+
+test3 :: proc() {
+    comptime {
+        // 1. Capture an expression as an AST
+        original_expr := code { 10 + 2 };
+
+        // 2. Manipulate it: change the `2` to a `5`
+        modified_expr := change_rhs_literal(original_expr, 5);
+
+        // 3. Insert the modified code. This creates a new constant.
+        NEW_RESULT :: modified_expr;
+    }
+
+    // Verify the result of the inserted code
+    assert(NEW_RESULT == 15);
+    printf("New result from metaprogramming: %d\n", NEW_RESULT);
+}
+```
+
+**Output:**
+```
+New result from metaprogramming: 15
+```
+
+### MLIR Blocks
+
+sr-lang allows embedding raw MLIR (Multi-Level Intermediate Representation) directly into your code using the `mlir` keyword. This provides an escape hatch for advanced users to interact with the compiler's intermediate stages, enabling highly optimized or specialized code generation.
+
+```go
+my_op := mlir {
+  module {
+    func.func @main() -> (i32) {
+      %c42 = arith.constant 42 : i32
+      return %c42 : i32
+    }
+  }
+};
+
+// This MLIR block, when processed by the compiler, would effectively
+// define a function that returns 42.
+// (Usage would depend on how the compiler integrates MLIR blocks)
+```
+
+### Assembly Functions
+
+For ultimate control over performance-critical sections, sr-lang allows you to implement function bodies directly in assembly language using the `asm` keyword. The compiler handles the ABI (Application Binary Interface) to ensure correct calling conventions.
+
+```go
+// A function that takes two i64 numbers and adds them using assembly
+add_asm :: fn(a: i64, b: i64) i64 asm {
+    mov rax, a  // Compiler maps `a` to a register or stack location
+    add rax, b  // Add the second argument
+    // The result is returned in `rax` by convention
+};
+
+asm_result := add_asm(10, 20);
+printf("ASM add result: %d\n", asm_result);
+```
+
+**Output:**
+```
+ASM add result: 30
+```
+
+Metaprogramming features in sr-lang provide a powerful toolkit for building highly optimized, flexible, and expressive libraries and applications.
+
+```

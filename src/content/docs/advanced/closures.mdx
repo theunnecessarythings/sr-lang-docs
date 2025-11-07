@@ -1,0 +1,47 @@
+---
+title: Closures
+description: Learn about closures in sr-lang.
+template: doc
+order: 5
+---
+
+## Closures
+
+**Closures** are functions that can capture variables from their enclosing environment. This allows them to access and manipulate data that exists outside of their own scope.
+
+In sr-lang, closures are defined using the `|...|` syntax.
+
+### Capturing Environment
+
+A closure can be returned from a function, and it will retain access to the variables that were in scope when it was created.
+
+```go
+// This function returns a closure that captures the 'amount' variable.
+make_adder :: proc(amount: i32) fn(i32) i32 {
+    add_amount := |x: i32| i32 {
+        return x + amount
+    }
+    return add_amount
+}
+
+main := proc() {
+    add_5 := make_adder(5)
+    add_10 := make_adder(10)
+
+    print("7 + 5 = ", add_5(7))   // Expected: 12
+    print("7 + 10 = ", add_10(7)) // Expected: 17
+}
+```
+
+### Type Inference
+
+The types of closure parameters and return values can often be inferred by the compiler.
+
+```go
+main := proc() {
+    numbers := [1, 2, 3, 4]
+    doubler := |x| x * 2 // Type of x and return value are inferred
+    doubled_numbers := map(numbers, doubler)
+    print("Doubled numbers: ", doubled_numbers) // Expected: [2, 4, 6, 8]
+}
+```

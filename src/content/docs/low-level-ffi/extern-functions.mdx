@@ -1,0 +1,81 @@
+---
+title: Extern Functions (FFI)
+description: Learn how to call external C functions from sr-lang.
+template: doc
+order: 1
+---
+
+## Extern Functions (FFI)
+
+sr-lang provides a Foreign Function Interface (FFI) that allows you to call functions written in other languages, primarily C. This is essential for reusing existing libraries, interacting with operating system APIs, and writing performance-critical code in a lower-level language.
+
+The `extern` keyword is used to declare a function that is defined in an external, separately compiled library.
+
+### Declaring Extern Functions
+
+To declare an external function, you use the `extern` keyword followed by the function's signature. You provide the function name, parameter types, and return type, but no function body.
+
+```go
+// Declare the C standard library `printf` function
+printf :: extern proc(format: string, ...) void;
+
+// Declare a custom external function from a linked library
+my_extern_fn :: extern proc(a: i32, b: i32) i32;
+```
+
+At link time, the sr-lang compiler will look for these functions in the linked libraries and resolve the calls.
+
+### Calling Extern Functions
+
+Once declared, you can call an `extern` function just like any other sr-lang function.
+
+```go
+// Assuming `my_extern_fn` is defined in a C library as:
+// int my_extern_fn(int a, int b) { return a + b; }
+
+// Declare the extern function
+my_extern_fn :: extern proc(a: i32, b: i32) i32;
+
+// Call it
+r := my_extern_fn(5, 7);
+printf("Extern fn returned %d\n", r);
+```
+
+**Output:**
+```
+Extern fn returned 12
+```
+
+### Working with Pointers
+
+FFI often involves passing pointers to data between sr-lang and the external library. This allows the external function to read or modify data that is owned by your sr-lang code.
+
+```go
+// C function definition:
+// void extern_modify_int(int *a) { *a = 10; }
+
+// Declare the extern function in sr-lang
+extern_modify_int :: extern proc(ptr: *i32);
+
+x := 1;
+printf("Original value: %d\n", x);
+
+// Pass a pointer to `x` to the C function
+extern_modify_int(&x);
+
+printf("Modified value: %d\n", x);
+```
+
+**Output:**
+```
+Original value: 1
+Modified value: 10
+```
+
+### Linking
+
+For the sr-lang compiler to find the external functions, you must instruct it to link against the library where they are defined (e.g., a `.so` file on Linux, a `.dll` on Windows, or a `.dylib` on macOS). The exact mechanism for this depends on the build system and compiler flags used.
+
+By providing a seamless FFI, sr-lang allows you to leverage the vast ecosystem of existing C libraries while still benefiting from the safety and modern features of sr-lang.
+
+```

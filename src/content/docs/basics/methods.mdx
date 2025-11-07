@@ -1,0 +1,54 @@
+---
+title: Methods
+description: Defining and using methods in sr-lang.
+template: doc
+order: 8
+---
+
+## Methods
+
+sr-lang allows you to define methods, which are functions associated with a specific type. Methods are defined like functions, but they take a special first parameter, `self`, which refers to the instance of the type the method is being called on.
+
+### Method Definition
+
+Methods are defined within the scope of a type, such as a `struct` or `enum`. The first parameter can be `self`, `*self`, or `*const self`, which determines how the method receives the instance.
+
+*   `self`: The method receives a copy of the instance (value receiver).
+*   `*self`: The method receives a mutable pointer to the instance (pointer receiver).
+*   `*const self`: The method receives an immutable pointer to the instance (const pointer receiver).
+
+```go
+Point :: struct { x: i32, y: i32 };
+
+// Static method (not a method on an instance)
+Point.origin :: fn() Point { return Point{ x: 0, y: 0 }; }
+
+// Method with a value receiver
+Point.distance :: proc(self: Point) i32 { return self.x + self.y; }
+
+// Method with a pointer receiver
+Point.translate :: proc(self: *Point, dx: i32, dy: i32) void {
+    self.x = self.x + dx;
+    self.y = self.y + dy;
+}
+
+// Method with a const pointer receiver
+Point.sum :: fn(self: *const Point) i32 { return self.x + self.y; }
+```
+
+### Method Invocation
+
+Methods are called using the `.` operator on an instance of the type.
+
+```go
+p := Point.origin();
+p.translate(3, 4);
+printf("distance=%d\n", p.distance()); // distance=7
+printf("sum=%d\n", p.sum());         // sum=7
+
+ptr := &p;
+ptr.translate(-1, 2);
+printf("final=%d,%d\n", p.x, p.y); // final=2,6
+```
+
+Methods provide a way to organize and encapsulate functionality related to a specific type, making your code more modular and easier to understand.

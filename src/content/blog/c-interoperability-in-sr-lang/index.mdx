@@ -1,0 +1,54 @@
+---
+title: 'Seamless C Interoperability in sr-lang'
+publishDate: 2025-11-08
+description: 'Learn how to call C functions and use inline assembly in sr-lang for low-level control and performance.'
+tags:
+  - sr-lang
+  - FFI
+  - C
+  - Assembly
+language: 'English'
+heroImage: { src: './thumbnail.jpg', color: '#F59E0B' }
+---
+
+## Seamless C Interoperability in sr-lang
+
+sr-lang is designed to be a powerful systems programming language, and a key part of that is its ability to interoperate seamlessly with C. This allows you to leverage existing C libraries and to drop down to a lower level of abstraction when you need to. sr-lang provides two main features for C interoperability: `extern` for calling C functions and `asm` for writing inline assembly.
+
+### `extern`: Calling C Functions
+
+The `extern` keyword allows you to declare a function that is defined in an external C library. You can then call this function from your sr-lang code as if it were a native sr-lang function.
+
+For example, to call the standard C `printf` function, you can declare it as an `extern proc`:
+
+```go
+printf :: extern proc(format: string, ...args: any) i32;
+
+// Now you can call printf from your sr-lang code
+printf("Hello from C!\n");
+```
+
+This makes it incredibly easy to use existing C libraries in your sr-lang projects. You just need to provide the function signature and link against the C library during compilation.
+
+### `asm`: Inline Assembly
+
+For even lower-level control, sr-lang allows you to write inline assembly using the `asm` keyword. This is useful for performance-critical code or for accessing hardware features that are not exposed through the language.
+
+Here's an example of a function that uses inline assembly to add two numbers:
+
+```go
+add_asm :: fn(a: i64, b: i64) i64 asm {
+    mov rax, a
+    add rax, b
+};
+
+result := add_asm(10, 20); // result is 30
+```
+
+The `asm` block is replaced with the provided assembly code during compilation. This gives you direct control over the machine code that is generated, allowing you to write highly optimized code.
+
+### Combining `extern` and `asm`
+
+You can even combine `extern` and `asm` to create powerful low-level abstractions. For example, you could write a high-performance math library in assembly and expose it to your sr-lang code using `extern`.
+
+sr-lang's C interoperability features make it a great choice for systems programming, allowing you to write high-level code without sacrificing low-level control. Whether you need to call a C library or write a few lines of assembly, sr-lang has you covered.
